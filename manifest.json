@@ -1,0 +1,20 @@
+{
+  "name": "Retro Game Gauntlet",
+  "short_name": "Retro Game Gauntlet",
+  "icons": [
+    {
+      "src": "android-chrome-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "android-chrome-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/rgg/",
+  "display": "standalone",
+  "theme_color": "#212121",
+  "background_color": "#212121"
+}
