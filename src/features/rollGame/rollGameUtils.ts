@@ -1,15 +1,10 @@
 import * as R from 'ramda';
+import { shuffle } from 'd3-array';
 
 import { RolledGame } from 'features/rollGame/rollGameTypes';
 
 import games from 'data/games.json';
 import platforms from 'data/platforms.json';
-
-const shuffleArray = (arr: any[]) =>
-  arr
-    .map((a) => [Math.random(), a])
-    .sort((a, b) => a[0] - b[0])
-    .map((a) => a[1]);
 
 export const getRandomGames = (
   selectedPlatformIds: string[],
@@ -25,7 +20,7 @@ export const getRandomGames = (
       R.map((name) => ({ platformId, name }), items),
     ),
     R.flatten,
-    shuffleArray,
+    shuffle,
     R.slice(0, count),
   )(gamesBySelectedPlatforms);
 
