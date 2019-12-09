@@ -59,7 +59,7 @@ export const rolledGameIndexSelector = (state: RootState) =>
   state.rollGame.gameIndex;
 
 export const rolledGameSelector = (state: RootState) => {
-  if (!state.rollGame.gameIndex) return null;
+  if (state.rollGame.gameIndex === null) return null;
 
   return state.rollGame.rolledGames[state.rollGame.gameIndex];
 };
