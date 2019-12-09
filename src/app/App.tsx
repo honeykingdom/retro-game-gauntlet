@@ -24,14 +24,23 @@ const AppRoot = styled.div`
     '.      .          .     '
     '.      roll-game  .     '
     '.      .          .     '
-    '.      side-left  .     '
-    '.      .          .     '
     '.      side-right .     '
+    '.      .          .     '
+    '.      side-left  .     '
     '.      .          .     '
     'footer footer     footer';
 
   @media (min-width: 720px) {
-    grid-template-columns: 32px auto 32px;
+    grid-template-rows: 48px 24px auto 24px auto 24px 48px;
+    grid-template-columns: 32px 1fr 24px 1fr 32px;
+    grid-template-areas:
+      'header header     header    header     header'
+      '.      .          .         .          .     '
+      '.      roll-game  roll-game roll-game  .     '
+      '.      .          .         .          .     '
+      '.      side-left  .         side-right .     '
+      '.      .          .         .          .     '
+      'footer footer     footer    footer     footer';
   }
 
   @media (min-width: 1200px) {
