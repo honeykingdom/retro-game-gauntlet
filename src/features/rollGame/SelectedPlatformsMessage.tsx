@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import * as R from 'ramda';
 import { Typography } from '@material-ui/core';
 
+import replaceSpacesWithNbsp from 'utils/replaceSpacesWithNbsp';
 import { selectedPlatformIdsSelector } from 'features/options/optionsSlice';
 
 import platforms from 'data/platforms.json';
@@ -35,9 +36,13 @@ const SelectedPlatformsMessage = () => {
     return (
       <Typography variant="h6" color="textSecondary">
         Selected&nbsp;platform:{' '}
-        <Typography variant="inherit" color="textPrimary">
-          {selectedPlatforms[0]?.name}
-        </Typography>
+        <Typography
+          variant="inherit"
+          color="textPrimary"
+          dangerouslySetInnerHTML={{
+            __html: replaceSpacesWithNbsp(selectedPlatforms[0]?.name || ''),
+          }}
+        />
       </Typography>
     );
   }
@@ -48,9 +53,14 @@ const SelectedPlatformsMessage = () => {
       {selectedPlatforms.map((platform, index) => (
         // eslint-disable-next-line react/no-array-index-key
         <React.Fragment key={index}>
-          <Typography variant="inherit" color="textPrimary" key={platform?.id}>
-            {platform?.name}
-          </Typography>
+          <Typography
+            variant="inherit"
+            color="textPrimary"
+            key={platform?.id}
+            dangerouslySetInnerHTML={{
+              __html: replaceSpacesWithNbsp(platform?.name || ''),
+            }}
+          />
           {selectedPlatforms.length - 1 !== index && ', '}
         </React.Fragment>
       ))}
