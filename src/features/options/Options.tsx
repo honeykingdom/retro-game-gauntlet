@@ -22,6 +22,10 @@ const OptionsRoot = styled.div`
   flex-direction: column;
 `;
 const OptionsList = styled.div<{ isDisabled: boolean }>`
+  transition-property: opacity;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+
   ${(p) =>
     p.isDisabled &&
     css`

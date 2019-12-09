@@ -28,6 +28,9 @@ const PlatformsList = styled.div<{ isDisabled: boolean }>`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  transition-property: opacity;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
 
   ${(p) =>
     p.isDisabled &&
