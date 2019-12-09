@@ -220,6 +220,7 @@ const useDrawCircle = ({ radius, canvasRef, onRollComplete }: Options) => {
     isRolling,
     speed,
     segmentAngle,
+    playTick,
     onRollComplete,
   ]);
 };
