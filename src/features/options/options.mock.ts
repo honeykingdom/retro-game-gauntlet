@@ -3,7 +3,7 @@ const secondsToSpinMarks = [...Array(6)].map((_, i) => ({
   label: (i + 1) * 10,
 }));
 
-const speedMarks = [...Array(8)].map((_, i) => ({
+const speedMarks = [...Array(5)].map((_, i) => ({
   value: i + 1,
   label: i + 1,
 }));
@@ -32,7 +32,7 @@ const options = [
       type: 'slider',
       step: 1,
       min: 1,
-      max: 8,
+      max: 5,
       marks: speedMarks,
     },
   },
