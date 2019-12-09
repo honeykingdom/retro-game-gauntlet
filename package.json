@@ -23,7 +23,46 @@
     "test": "react-scripts test"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+      "airbnb",
+      "plugin:@typescript-eslint/recommended",
+      "prettier",
+      "prettier/react",
+      "prettier/@typescript-eslint"
+    ],
+    "plugins": [
+      "prettier",
+      "react-hooks",
+      "@typescript-eslint"
+    ],
+    "globals": {
+      "window": true,
+      "document": true,
+      "localStorage": true
+    },
+    "env": {
+      "jest": true
+    },
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "paths": [
+            "src"
+          ]
+        }
+      }
+    },
+    "rules": {
+      "import/no-unresolved": "off",
+      "react/jsx-filename-extension": "off",
+      "@typescript-eslint/explicit-function-return-type": "off"
+    }
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all",
+    "arrowParens": "always"
   },
   "browserslist": {
     "production": [
