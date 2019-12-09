@@ -23,10 +23,12 @@ const FooterInner = styled(Typography)`
   max-width: 1280px;
   height: 100%;
   font-size: 0.8rem !important;
+  text-align: center;
   opacity: 0.6;
 
-  @media (min-width: 1200px) {
+  @media (min-width: 720px) {
     flex-direction: row;
+    text-align: left;
   }
 `;
 const FooterLink = styled(Link).attrs({
