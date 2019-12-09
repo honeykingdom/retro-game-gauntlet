@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import timingFunction from 'utils/timingFunction';
@@ -14,12 +14,23 @@ import {
   secondsToSpinSelector,
   speedSelector,
 } from 'features/options/optionsSlice';
+import useSoundsList from 'features/circle/useSoundsList';
 
-const getGameIndexByAngle = (angle: number, segmentsCount: number) => {
-  const a = Math.abs((angle % (Math.PI * 2)) - Math.PI * 2) + Math.PI;
-  const coeff = (2 * Math.PI) / segmentsCount;
+const wheelSoundTicks = [
+  document.getElementById('wheel-sound-tick-1'),
+  document.getElementById('wheel-sound-tick-2'),
+  document.getElementById('wheel-sound-tick-3'),
+] as HTMLAudioElement[];
 
-  return Math.floor(a / coeff) % segmentsCount;
+const wheelSoundComplete = document.getElementById(
+  'wheel-sound-complete',
+) as HTMLAudioElement;
+
+const getGameIndexByAngle = (angle: number, segmentAngle: number) => {
+  const normalizedAngle =
+    Math.abs((angle % (Math.PI * 2)) - Math.PI * 2) + Math.PI;
+
+  return Math.floor((normalizedAngle % (Math.PI * 2)) / segmentAngle);
 };
 
 const normalizeSegments = (
@@ -31,6 +42,9 @@ const normalizeSegments = (
     name: sliceTextByMaxWidth(name, textFont, maxTextWidth),
     ...rest,
   }));
+
+const getSegmentAngle = (segmentsCount: number) =>
+  (2 * Math.PI) / segmentsCount;
 
 type Options = {
   radius: number;
@@ -44,17 +58,19 @@ type State = {
   // previous time in the animate function
   prevTime: number | null;
   // time from the start of the animation
-  incTime: number;
+  fullTime: number;
   // full canvas rotation angle
-  incAngle: number;
+  fullAngle: number;
+  currentIndex: number;
   scale: number;
 };
 
 const initialState = {
   requestId: null,
   prevTime: null,
-  incTime: 0,
-  incAngle: 0,
+  fullTime: 0,
+  fullAngle: 0,
+  currentIndex: 0,
   scale: -1,
 };
 
@@ -68,6 +84,8 @@ const useDrawCircle = ({ radius, canvasRef, onRollComplete }: Options) => {
   const secondsToSpin = useSelector(secondsToSpinSelector);
   const rolledGames = useSelector(rolledGamesSelector);
 
+  const playTick = useSoundsList(wheelSoundTicks);
+
   const textFont = `${(12 / 200) * radius}px ${GLOBAL_FONT}`;
   const textMaxWidth = (135 / 200) * radius;
 
@@ -76,6 +94,14 @@ const useDrawCircle = ({ radius, canvasRef, onRollComplete }: Options) => {
     segments,
     radius,
     textFont,
+  ]);
+
+  const [segmentAngle, setSegmentAngle] = useState(() =>
+    getSegmentAngle(segments.length),
+  );
+
+  useEffect(() => setSegmentAngle(getSegmentAngle(segments.length)), [
+    segments.length,
   ]);
 
   // TODO: fix circle blinking on resize
@@ -128,9 +154,10 @@ const useDrawCircle = ({ radius, canvasRef, onRollComplete }: Options) => {
 
       window.cancelAnimationFrame(state.requestId);
 
-      state.incAngle = 0;
+      state.fullAngle = 0;
+      state.currentIndex = 0;
       state.prevTime = null;
-      state.incTime = 0;
+      state.fullTime = 0;
     };
 
     const animate = (time: number) => {
@@ -141,31 +168,37 @@ const useDrawCircle = ({ radius, canvasRef, onRollComplete }: Options) => {
       const deltaTime = time - state.prevTime;
       state.prevTime = time;
 
-      state.incTime += deltaTime;
+      state.fullTime += deltaTime;
 
-      if (state.incTime > secondsToSpin * 1000) {
-        const segmentIndex = getGameIndexByAngle(
-          state.incAngle,
-          segments.length,
-        );
-
-        onRollComplete(segmentIndex);
+      if (state.fullTime > secondsToSpin * 1000) {
+        onRollComplete(state.currentIndex);
+        wheelSoundComplete.play();
         stop();
+
         return;
       }
 
-      const timeI = state.incTime / (secondsToSpin * 1000);
+      const currentIndex = getGameIndexByAngle(state.fullAngle, segmentAngle);
+
+      if (state.currentIndex !== currentIndex) {
+        playTick();
+        state.currentIndex = currentIndex;
+      }
+
+      const timeI = state.fullTime / (secondsToSpin * 1000);
       const speedI = timingFunction(timeI);
       const angle = ((2 * Math.PI) / 360) * speedI * speed;
 
       drawFunc(context, angle);
 
-      state.incAngle += angle;
+      state.fullAngle += angle;
       state.requestId = window.requestAnimationFrame(animate);
     };
 
     const start = () => {
       const { scale } = stateRef.current;
+
+      state.currentIndex = getGameIndexByAngle(state.fullAngle, segmentAngle);
 
       context.resetTransform();
       context.scale(scale, scale);
@@ -186,7 +219,7 @@ const useDrawCircle = ({ radius, canvasRef, onRollComplete }: Options) => {
     secondsToSpin,
     isRolling,
     speed,
-    segments.length,
+    segmentAngle,
     onRollComplete,
   ]);
 };
