@@ -1,12 +1,12 @@
-import { easeExpOut, easeExpInOut, easeCircleInOut } from "d3-ease";
+import { easeExpOut, easeExpInOut, easeCircleInOut } from 'd3-ease';
 
 const f1 = easeExpOut;
 const f2 = easeExpInOut;
 const f3 = easeCircleInOut;
 
-const breakpointX1 = 0.3;
-const breakpointX2 = 0.5;
-const breakpointY1 = 0.3;
+const breakpointX1 = 0.2;
+const breakpointX2 = 0.4;
+const breakpointY1 = 0.2;
 
 const timingFunction = (n: number) => {
   // f1: (x: [0, bx1)) => y: [0, 1);
