@@ -7,6 +7,7 @@ import { Typography, IconButton, Tooltip, AppBar } from '@material-ui/core';
 import DarkThemeIcon from '@material-ui/icons/Brightness7';
 import LightThemeIcon from '@material-ui/icons/Brightness4';
 
+import analytics from 'utils/analytics';
 import { BREAKPOINTS } from 'utils/constants';
 import {
   currentThemeSelector,
@@ -55,8 +56,11 @@ const Header = ({ className }: Props) => {
   const currentTheme = useSelector(currentThemeSelector);
 
   const handleToggleTheme = () => {
+    const name = 'currentTheme';
     const value = currentTheme === 'dark' ? 'light' : 'dark';
-    dispatch(updateOption({ name: 'currentTheme', value }));
+
+    analytics.event.ui.changeOption(name, value === 'dark' ? 1 : 0);
+    dispatch(updateOption({ name, value }));
   };
 
   return (
