@@ -63,11 +63,20 @@ const normalizeMap = {
 };
 
 const normalizeGame = (name) => {
-  const nameTrim = name.trim();
-  const newName = normalizeMap[nameTrim] || nameTrim;
+  let newName = name.trim();
+
+  if (normalizeMap[newName]) {
+    newName = normalizeMap[newName];
+  }
 
   // replace '�' character
-  return newName.replace(/\uFFFD/g, ' ').trim();
+  newName = newName.replace(/\uFFFD/g, ' ').trim();
+
+  if (newName.endsWith(', The')) {
+    newName = `The ${newName.slice(0, -5)}`;
+  }
+
+  return newName;
 };
 
 const main = async () => {
