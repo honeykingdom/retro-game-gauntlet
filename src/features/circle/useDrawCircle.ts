@@ -15,6 +15,7 @@ import {
   speedSelector,
 } from 'features/options/optionsSlice';
 import useSoundsList from 'features/circle/useSoundsList';
+import { WheelColors } from 'features/circle/CircleCanvas';
 
 const wheelSoundTicks = [
   document.getElementById('wheel-sound-tick-1'),
@@ -49,6 +50,7 @@ const getSegmentAngle = (segmentsCount: number) =>
 type Options = {
   radius: number;
   canvasRef: React.RefObject<HTMLCanvasElement>;
+  wheelColors: WheelColors;
   onRollComplete: (id: number) => void;
 };
 
@@ -76,7 +78,12 @@ const initialState = {
 
 // NOTE: in "variableI" letter "I" means UnitInterval - [0, 1)
 
-const useDrawCircle = ({ radius, canvasRef, onRollComplete }: Options) => {
+const useDrawCircle = ({
+  radius,
+  canvasRef,
+  wheelColors,
+  onRollComplete,
+}: Options) => {
   const stateRef = useRef<State>(initialState);
 
   const isRolling = useSelector(isRollingSelector);
@@ -90,11 +97,10 @@ const useDrawCircle = ({ radius, canvasRef, onRollComplete }: Options) => {
   const textMaxWidth = (135 / 200) * radius;
 
   const segments = normalizeSegments(rolledGames, textFont, textMaxWidth);
-  const drawFunc = useMemo(() => drawCircle(segments, radius, textFont), [
-    segments,
-    radius,
-    textFont,
-  ]);
+  const drawFunc = useMemo(
+    () => drawCircle(segments, radius, textFont, wheelColors),
+    [segments, radius, textFont, wheelColors],
+  );
 
   const [segmentAngle, setSegmentAngle] = useState(() =>
     getSegmentAngle(segments.length),

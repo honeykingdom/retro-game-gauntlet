@@ -1,4 +1,5 @@
 import { RolledGame } from 'features/rollGame/rollGameTypes';
+import { WheelColors } from 'features/circle/CircleCanvas';
 
 const LINE_WIDTH = 4;
 
@@ -20,6 +21,7 @@ const drawCircle = (
   segments: RolledGame[],
   radius: number,
   textFont: string,
+  wheelColors: WheelColors,
 ) => (context: CanvasRenderingContext2D, rotateAngle: number) => {
   const size = radius * 2;
   const coeff = (2 * Math.PI) / segments.length;
@@ -32,7 +34,7 @@ const drawCircle = (
   context.translate(-radius, -radius);
 
   context.arc(radius, radius, radius, 0, 2 * Math.PI);
-  context.fillStyle = '#121212';
+  context.fillStyle = wheelColors.wheelBackground;
   context.fill();
 
   segments.forEach((segment, i) => {
@@ -42,7 +44,7 @@ const drawCircle = (
     context.beginPath();
     context.arc(radius, radius, radius - LINE_WIDTH / 2, from, to);
     context.lineTo(radius, radius);
-    context.strokeStyle = '#fff';
+    context.strokeStyle = wheelColors.border;
     context.lineWidth = LINE_WIDTH;
     context.stroke();
 
@@ -57,7 +59,7 @@ const drawCircle = (
     context.rotate(textAngleRotation);
     context.beginPath();
     context.font = textFont;
-    context.fillStyle = '#fff';
+    context.fillStyle = wheelColors.text;
     context.fillText(segment.name, 0, 4);
     context.restore();
   });
