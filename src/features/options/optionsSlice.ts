@@ -6,19 +6,22 @@ import {
   writeOptionsToLocalStorage,
   readOptionsFromLocalStorage,
 } from 'features/options/optionsUtils';
+import { AppTheme } from 'features/options/optionsTypes';
 
 type OptionsState = {
   selectedPlatformIds: string[];
   secondsToSpin: number;
   speed: number;
   numberOfGames: number;
+  currentTheme: AppTheme;
 };
 
 export type OptionName =
   | 'secondsToSpin'
   | 'speed'
   | 'numberOfGames'
-  | 'selectedPlatformIds';
+  | 'selectedPlatformIds'
+  | 'currentTheme';
 type UpdateOptionAction = {
   name: OptionName;
   value: any;
@@ -29,6 +32,7 @@ const initialState: OptionsState = {
   secondsToSpin: 30,
   speed: 3,
   numberOfGames: 16,
+  currentTheme: 'dark',
   ...readOptionsFromLocalStorage(),
 };
 
@@ -39,7 +43,7 @@ const options = createSlice({
   reducers: {
     updateOption: (state, { payload }: PayloadAction<UpdateOptionAction>) => {
       const { name, value } = payload;
-      state[name] = value;
+      (state as any)[name] = value;
 
       writeOptionsToLocalStorage(state);
     },
@@ -77,3 +81,6 @@ export const numberOfGamesSelector = (state: RootState) =>
 
 export const selectedPlatformIdsSelector = (state: RootState) =>
   state.options.selectedPlatformIds;
+
+export const currentThemeSelector = (state: RootState) =>
+  state.options.currentTheme;
