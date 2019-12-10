@@ -1,9 +1,7 @@
 import { Slider, withStyles } from '@material-ui/core';
-import * as colors from '@material-ui/core/colors';
 
 const PrettoSlider = withStyles({
   root: {
-    color: colors.grey[500],
     height: 8,
   },
   thumb: {
