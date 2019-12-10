@@ -67,8 +67,8 @@ const AppRoot = styled(Box)`
   }
 
   @media (min-width: ${BREAKPOINTS.lg}px) {
-    grid-template-rows: 48px 40px auto 40px 48px;
-    grid-template-columns: auto 340px 40px 400px 40px 340px auto;
+    grid-template-rows: 48px 16px auto 16px 48px;
+    grid-template-columns: auto 340px 16px 400px 16px 340px auto;
     grid-template-areas:
       'header header header header header header header'
       '.      .      .      .      .      .      .     '
