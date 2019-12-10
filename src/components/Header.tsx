@@ -1,14 +1,46 @@
 import React from 'react';
 import styled from 'styled-components';
-import * as colors from '@material-ui/core/colors';
-import { Typography } from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
+import { useWindowSize } from 'react-use';
+import { useTheme, Theme } from '@material-ui/core/styles';
+import { Typography, IconButton, Tooltip, AppBar } from '@material-ui/core';
+import DarkThemeIcon from '@material-ui/icons/Brightness7';
+import LightThemeIcon from '@material-ui/icons/Brightness4';
 
-const HeaderRoot = styled.header`
+import { BREAKPOINTS } from 'utils/constants';
+import {
+  currentThemeSelector,
+  updateOption,
+} from 'features/options/optionsSlice';
+
+const HeaderRoot = styled(AppBar)<{ theme: Theme }>`
+  background-color: ${(p) => p.theme.palette.background.default} !important;
+  color: ${(p) => p.theme.palette.text.primary} !important;
+`;
+const HeaderInner = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
-  background-color: ${colors.grey[800]};
-  color: #fff;
+  justify-content: center;
+  margin: 0 auto;
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  @media (min-width: ${BREAKPOINTS.lg}px) {
+    width: ${BREAKPOINTS.lg}px;
+  }
+
+  @media (min-width: ${BREAKPOINTS.xl}px) {
+    width: 1640px;
+  }
+`;
+const ToggleThemeButton = styled(IconButton)`
+  position: absolute !important;
+  right: 8px;
+
+  @media (min-width: ${BREAKPOINTS.lg}px) {
+    right: 0;
+  }
 `;
 
 type Props = {
@@ -16,11 +48,31 @@ type Props = {
 };
 
 const Header = ({ className }: Props) => {
+  const dispatch = useDispatch();
+
+  const theme = useTheme();
+  const windowSize = useWindowSize();
+  const currentTheme = useSelector(currentThemeSelector);
+
+  const handleToggleTheme = () => {
+    const value = currentTheme === 'dark' ? 'light' : 'dark';
+    dispatch(updateOption({ name: 'currentTheme', value }));
+  };
+
   return (
-    <HeaderRoot className={className}>
-      <Typography variant="h4">Retro Game Gauntlet</Typography>
+    <HeaderRoot className={className} position="static" theme={theme}>
+      <HeaderInner>
+        <Typography variant={windowSize.width < BREAKPOINTS.sm ? 'h5' : 'h4'}>
+          Retro Game Gauntlet
+        </Typography>
+        <Tooltip title="Toggle dark/light theme">
+          <ToggleThemeButton color="inherit" onClick={handleToggleTheme}>
+            {currentTheme === 'dark' ? <LightThemeIcon /> : <DarkThemeIcon />}
+          </ToggleThemeButton>
+        </Tooltip>
+      </HeaderInner>
     </HeaderRoot>
   );
 };
 
-export default Header;
+export default React.memo(Header);

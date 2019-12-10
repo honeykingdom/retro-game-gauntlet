@@ -8,6 +8,7 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 
 import analytics from 'utils/analytics';
+import { BREAKPOINTS } from 'utils/constants';
 import Platform from 'features/platforms/Platform';
 import {
   selectPlatform,
@@ -116,7 +117,10 @@ const Platforms = () => {
           Select None
         </Button>
       </Box>
-      <Scrollbar style={{ flexGrow: 1 }} native={windowSize.width < 1200}>
+      <Scrollbar
+        style={{ flexGrow: 1 }}
+        native={windowSize.width < BREAKPOINTS.lg}
+      >
         <List dense disablePadding>
           {platforms.map(({ id, name, releaseDate, gamesCount }) => (
             <Platform
@@ -136,7 +140,7 @@ const Platforms = () => {
   );
 
   const renderCompactPlatformsList = () => (
-    <Scrollbar native={windowSize.width < 1200}>
+    <Scrollbar native={windowSize.width < BREAKPOINTS.lg}>
       <List>
         {platforms
           .filter(({ id }) => selectedPlatformIds.includes(id))

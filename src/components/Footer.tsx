@@ -1,18 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
-import * as colors from '@material-ui/core/colors';
-import { Typography, Link } from '@material-ui/core';
+import { Typography, Link, useTheme, Theme } from '@material-ui/core';
 import { format } from 'date-fns';
 
 import analytics from 'utils/analytics';
+import { BREAKPOINTS } from 'utils/constants';
 import buildDate from 'utils/buildDate';
 import { gamesCount } from 'features/rollGame/rollGameUtils';
 
-const FooterRoot = styled.footer`
+const FooterRoot = styled.footer<{ theme: Theme }>`
   display: flex;
   justify-content: center;
-  border-top: 1px solid ${colors.grey[800]};
-  border-bottom: 1px solid ${colors.grey[800]};
+  border-top: 1px solid ${(p) => p.theme.palette.divider};
 `;
 const FooterInner = styled(Typography)`
   display: flex;
@@ -26,7 +25,7 @@ const FooterInner = styled(Typography)`
   text-align: center;
   opacity: 0.6;
 
-  @media (min-width: 720px) {
+  @media (min-width: ${BREAKPOINTS.md}px) {
     flex-direction: row;
     text-align: left;
   }
@@ -50,8 +49,10 @@ const reportBugUrl = '//github.com/honeykingdom/rgg/issues';
 const buildDateString = format(new Date(buildDate), 'P p');
 
 const Footer = ({ className }: Props) => {
+  const theme = useTheme();
+
   return (
-    <FooterRoot className={className}>
+    <FooterRoot className={className} theme={theme}>
       <FooterInner>
         <Typography variant="inherit" color="textSecondary">
           Games in database:{' '}
