@@ -127,8 +127,8 @@ const useDrawCircle = ({
   onRollComplete,
 }: Options) => {
   const isRolling = useSelector(isRollingSelector);
-  const secondsToSpin = useSelector(secondsToSpinSelector);
   const speed = useSelector(speedSelector);
+  const secondsToSpin = useSelector(secondsToSpinSelector);
   const rolledGames = useSelector(rolledGamesSelector);
 
   const playTick = useSoundsList(wheelSoundTicks);
@@ -185,8 +185,10 @@ const useDrawCircle = ({
   }, [state, drawState, wheelColors, radius]);
 
   useEffect(() => {
+    state.speed = speed;
+    state.secondsToSpin = secondsToSpin;
     state.onRollComplete = onRollComplete;
-  }, [state, onRollComplete]);
+  }, [state, speed, secondsToSpin, onRollComplete]);
 
   useEffect(() => {
     const handleResize = () => {
