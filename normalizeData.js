@@ -99,15 +99,6 @@ const main = async () => {
     {},
   );
 
-  // await Promise.all(
-  //   platforms.map(({ id }) => {
-  //     return fs.writeFile(
-  //       path.join('src/data/result', `${id}.json`),
-  //       JSON.stringify(data[id], null, 2),
-  //     );
-  //   }),
-  // );
-
   const normalizedPlatforms = platforms.map(
     ({ file, encoding, id, ...rest }) => ({
       ...rest,
