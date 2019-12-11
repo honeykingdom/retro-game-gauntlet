@@ -1,5 +1,4 @@
-import { RolledGame } from 'features/rollGame/rollGameTypes';
-import { WheelColors } from 'features/circle/CircleCanvas';
+import { DrawState } from './useDrawCircle';
 
 const LINE_WIDTH = 4;
 
@@ -17,20 +16,27 @@ const getY = (offset: number, radius: number, angle: number) =>
   offset + radius * Math.cos(angle);
 
 /* eslint-disable no-param-reassign */
-const drawCircle = (
-  segments: RolledGame[],
-  radius: number,
-  textFont: string,
-  wheelColors: WheelColors,
-) => (context: CanvasRenderingContext2D, rotateAngle: number) => {
+const drawCircle = ({
+  context,
+  segments,
+  radius,
+  rotationAngle,
+  segmentAngle,
+  textFont,
+  wheelColors,
+  scale,
+}: DrawState) => {
+  if (!context) return;
+
   const size = radius * 2;
-  const coeff = (2 * Math.PI) / segments.length;
   const textOffset = (20 / 200) * radius;
 
+  context.setTransform(1, 0, 0, 1, 0, 0);
+  context.scale(scale, scale);
   context.clearRect(0, 0, size, size);
 
   context.translate(radius, radius);
-  context.rotate(rotateAngle);
+  context.rotate(rotationAngle);
   context.translate(-radius, -radius);
 
   context.arc(radius, radius, radius, 0, 2 * Math.PI);
@@ -38,8 +44,8 @@ const drawCircle = (
   context.fill();
 
   segments.forEach((segment, i) => {
-    const from = i * coeff;
-    const to = (i + 1) * coeff;
+    const from = i * segmentAngle;
+    const to = (i + 1) * segmentAngle;
 
     context.beginPath();
     context.arc(radius, radius, radius - LINE_WIDTH / 2, from, to);
@@ -63,6 +69,8 @@ const drawCircle = (
     context.fillText(segment.name, 0, 4);
     context.restore();
   });
+
+  context.scale(scale, scale);
 };
 /* eslint-disable no-param-reassign */
 

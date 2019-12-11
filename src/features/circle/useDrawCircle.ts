@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 
 import timingFunction from 'utils/timingFunction';
@@ -27,11 +27,41 @@ const wheelSoundComplete = document.getElementById(
   'wheel-sound-complete',
 ) as HTMLAudioElement;
 
-const getGameIndexByAngle = (angle: number, segmentAngle: number) => {
-  const normalizedAngle =
-    Math.abs((angle % (Math.PI * 2)) - Math.PI * 2) + Math.PI;
+type OnRollComplete = (id: number) => void;
 
-  return Math.floor((normalizedAngle % (Math.PI * 2)) / segmentAngle);
+type Options = {
+  radius: number;
+  canvasRef: React.RefObject<HTMLCanvasElement>;
+  wheelColors: WheelColors;
+  onRollComplete: OnRollComplete;
+};
+
+export type DrawState = {
+  context: CanvasRenderingContext2D | null | undefined;
+  segments: RolledGame[];
+  radius: number;
+  wheelColors: WheelColors;
+  textFont: string;
+  // full canvas rotation angle
+  rotationAngle: number;
+  segmentAngle: number;
+  scale: number;
+};
+
+type State = {
+  // requestAnimationFrame id
+  requestId: number | null;
+  // previous time in the animate function
+  prevTime: number | null;
+  // time from the start of the animation
+  fullTime: number;
+  // current segment
+  currentIndex: number;
+  secondsToSpin: number;
+  speed: number;
+  start: Function;
+  stop: Function;
+  onRollComplete: OnRollComplete;
 };
 
 const normalizeSegments = (
@@ -44,39 +74,51 @@ const normalizeSegments = (
     ...rest,
   }));
 
+const getGameIndexByAngle = ({ rotationAngle, segmentAngle }: DrawState) => {
+  const normalizedAngle =
+    Math.abs((rotationAngle % (Math.PI * 2)) - Math.PI * 2) + Math.PI;
+
+  return Math.floor((normalizedAngle % (Math.PI * 2)) / segmentAngle);
+};
+
+const getDevicePixelRatio = () => window.devicePixelRatio || 1;
+
+const getTextFont = (radius: number) =>
+  `${(12 / 200) * radius}px ${GLOBAL_FONT}`;
+
 const getSegmentAngle = (segmentsCount: number) =>
   (2 * Math.PI) / segmentsCount;
 
-type Options = {
-  radius: number;
-  canvasRef: React.RefObject<HTMLCanvasElement>;
-  wheelColors: WheelColors;
-  onRollComplete: (id: number) => void;
-};
-
-type State = {
-  // requestAnimationFrame id
-  requestId: number | null;
-  // previous time in the animate function
-  prevTime: number | null;
-  // time from the start of the animation
-  fullTime: number;
-  // full canvas rotation angle
-  fullAngle: number;
-  currentIndex: number;
-  scale: number;
-};
-
-const initialState = {
+const getInitialState = (
+  secondsToSpin: number,
+  speed: number,
+  onRollComplete: OnRollComplete,
+): State => ({
   requestId: null,
   prevTime: null,
   fullTime: 0,
-  fullAngle: 0,
   currentIndex: 0,
-  scale: -1,
-};
+  secondsToSpin,
+  speed,
+  start: () => null,
+  stop: () => null,
+  onRollComplete,
+});
 
-// NOTE: in "variableI" letter "I" means UnitInterval - [0, 1)
+const getInitialDrawState = (
+  segments: RolledGame[],
+  wheelColors: WheelColors,
+  radius: number,
+): DrawState => ({
+  context: null,
+  segments,
+  radius,
+  wheelColors,
+  textFont: getTextFont(radius),
+  rotationAngle: 0,
+  segmentAngle: getSegmentAngle(segments.length),
+  scale: getDevicePixelRatio(),
+});
 
 const useDrawCircle = ({
   radius,
@@ -84,151 +126,165 @@ const useDrawCircle = ({
   wheelColors,
   onRollComplete,
 }: Options) => {
-  const stateRef = useRef<State>(initialState);
-
   const isRolling = useSelector(isRollingSelector);
-  const speed = useSelector(speedSelector);
   const secondsToSpin = useSelector(secondsToSpinSelector);
+  const speed = useSelector(speedSelector);
   const rolledGames = useSelector(rolledGamesSelector);
 
   const playTick = useSoundsList(wheelSoundTicks);
 
-  const textFont = `${(12 / 200) * radius}px ${GLOBAL_FONT}`;
-  const textMaxWidth = (135 / 200) * radius;
+  const stateRef = useRef<State>();
+  const drawStateRef = useRef<DrawState>();
 
-  const segments = normalizeSegments(rolledGames, textFont, textMaxWidth);
-  const drawFunc = useMemo(
-    () => drawCircle(segments, radius, textFont, wheelColors),
-    [segments, radius, textFont, wheelColors],
-  );
+  // initialize state
+  if (!stateRef.current) {
+    stateRef.current = getInitialState(secondsToSpin, speed, onRollComplete);
+  }
 
-  const [segmentAngle, setSegmentAngle] = useState(() =>
-    getSegmentAngle(segments.length),
-  );
+  // initialize draw state
+  if (!drawStateRef.current) {
+    drawStateRef.current = getInitialDrawState(
+      rolledGames,
+      wheelColors,
+      radius,
+    );
+  }
 
-  useEffect(() => setSegmentAngle(getSegmentAngle(segments.length)), [
-    segments.length,
-  ]);
+  // this object links never changes
+  const state = stateRef.current;
+  const drawState = drawStateRef.current;
 
-  // TODO: fix circle blinking on resize
+  useEffect(() => {
+    drawState.context = canvasRef.current?.getContext('2d');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [drawState, canvasRef, canvasRef.current]);
+
+  useEffect(() => {
+    const textMaxWidth = (135 / 200) * drawState.radius;
+
+    drawState.segments = normalizeSegments(
+      rolledGames,
+      drawState.textFont,
+      textMaxWidth,
+    );
+    drawState.segmentAngle = getSegmentAngle(rolledGames.length);
+
+    if (state.requestId === null) {
+      window.requestAnimationFrame(() => drawCircle(drawState));
+    }
+  }, [state, drawState, rolledGames]);
+
+  useEffect(() => {
+    drawState.wheelColors = wheelColors;
+    drawState.radius = radius;
+    drawState.textFont = getTextFont(radius);
+
+    if (state.requestId === null) {
+      window.requestAnimationFrame(() => drawCircle(drawState));
+    }
+  }, [state, drawState, wheelColors, radius]);
+
+  useEffect(() => {
+    state.onRollComplete = onRollComplete;
+  }, [state, onRollComplete]);
 
   useEffect(() => {
     const handleResize = () => {
-      if (!canvasRef.current) return;
-
-      const dpr = window.devicePixelRatio || 1;
-
-      const rect = canvasRef.current.getBoundingClientRect();
-      const context = canvasRef.current.getContext('2d');
-
-      if (!context) return;
-
-      // if animation not playing update scale and redraw
-      if (!stateRef.current.requestId) {
-        // eslint-disable-next-line no-param-reassign
-        canvasRef.current.width = rect.width * dpr;
-        // eslint-disable-next-line no-param-reassign
-        canvasRef.current.height = rect.height * dpr;
-        context.scale(dpr, dpr);
-
-        drawFunc(context, 0);
-      }
-
-      stateRef.current.scale = dpr;
+      drawState.scale = getDevicePixelRatio();
     };
-
-    handleResize();
 
     window.addEventListener('resize', handleResize);
 
     return () => window.removeEventListener('resize', handleResize);
-  }, [canvasRef, stateRef, drawFunc]);
+  }, [drawState]);
 
+  // TODO: optimize this effect
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    const context = canvasRef.current.getContext('2d');
-    const state = stateRef.current;
+    /* eslint-disable no-param-reassign */
+    canvasRef.current.width = radius * 2 * drawState.scale;
+    canvasRef.current.height = radius * 2 * drawState.scale;
+    /* eslint-enable no-param-reassign */
 
-    if (!context) return;
+    if (state.requestId === null) {
+      window.requestAnimationFrame(() => drawCircle(drawState));
+    }
+  }, [canvasRef, state, drawState, drawState.scale, radius]);
 
-    // first initial draw
-    drawFunc(context, 0);
-
+  useEffect(() => {
     const stop = () => {
       if (!state.requestId) return;
 
       window.cancelAnimationFrame(state.requestId);
-
-      state.fullAngle = 0;
-      state.currentIndex = 0;
-      state.prevTime = null;
-      state.fullTime = 0;
+      state.requestId = null;
     };
 
     const animate = (time: number) => {
+      // first draw
       if (state.prevTime === null) {
+        state.currentIndex = getGameIndexByAngle(drawState);
         state.prevTime = time;
       }
 
       const deltaTime = time - state.prevTime;
-      state.prevTime = time;
 
+      state.prevTime = time;
       state.fullTime += deltaTime;
 
-      if (state.fullTime > secondsToSpin * 1000) {
-        onRollComplete(state.currentIndex);
+      if (state.fullTime > state.secondsToSpin * 1000) {
+        state.onRollComplete(state.currentIndex);
         wheelSoundComplete.play();
         stop();
 
         return;
       }
 
-      const currentIndex = getGameIndexByAngle(state.fullAngle, segmentAngle);
+      const currentIndex = getGameIndexByAngle(drawState);
 
       if (state.currentIndex !== currentIndex) {
         playTick();
         state.currentIndex = currentIndex;
       }
 
-      const timeI = state.fullTime / (secondsToSpin * 1000);
+      // NOTE: in "variableI" letter "I" means UnitInterval - [0, 1)
+
+      const timeI = state.fullTime / (state.secondsToSpin * 1000);
       const speedI = timingFunction(timeI);
-      const angle = ((2 * Math.PI) / 360) * speedI * speed;
+      const deltaAngle = ((2 * Math.PI) / 360) * speedI * state.speed;
 
-      drawFunc(context, angle);
+      drawState.rotationAngle += deltaAngle;
 
-      state.fullAngle += angle;
+      drawCircle(drawState);
+
       state.requestId = window.requestAnimationFrame(animate);
     };
 
     const start = () => {
-      const { scale } = stateRef.current;
+      if (drawState.context) {
+        // reset transform
+        drawState.context.setTransform(1, 0, 0, 1, 0, 0);
+      }
 
-      state.currentIndex = getGameIndexByAngle(state.fullAngle, segmentAngle);
-
-      context.resetTransform();
-      context.scale(scale, scale);
-
+      drawState.rotationAngle = 0;
+      state.currentIndex = 0;
+      state.prevTime = null;
+      state.fullTime = 0;
       state.requestId = window.requestAnimationFrame(animate);
     };
 
-    if (isRolling) {
-      start();
-    }
+    state.start = start;
+    state.stop = stop;
 
     // eslint-disable-next-line consistent-return
     return () => stop();
-  }, [
-    canvasRef,
-    stateRef,
-    drawFunc,
-    secondsToSpin,
-    isRolling,
-    speed,
-    segmentAngle,
-    playTick,
-    onRollComplete,
-  ]);
+  }, [state, drawState, playTick]);
+
+  useEffect(() => {
+    if (isRolling) {
+      state.start();
+    }
+  }, [state, isRolling]);
 };
 
 export default useDrawCircle;
