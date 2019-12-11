@@ -13,7 +13,7 @@ const pageview = (page: string) => ReactGA.pageview(page);
 
 const sendEvent = (eventArgs: ReactGA.EventArgs) => {
   if (process.env.NODE_ENV !== 'production') {
-    console.log(eventArgs);
+    // console.log(eventArgs);
   } else {
     ReactGA.event(eventArgs);
   }
