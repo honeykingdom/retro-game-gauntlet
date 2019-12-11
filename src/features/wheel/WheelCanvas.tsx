@@ -11,7 +11,7 @@ import {
   updateRolledGames,
   isRollingSelector,
 } from 'features/rollGame/rollGameSlice';
-import useDrawCircle from 'features/circle/useDrawCircle';
+import useDrawWheel from 'features/wheel/useDrawWheel';
 import {
   selectedPlatformIdsSelector,
   currentThemeSelector,
@@ -152,7 +152,7 @@ const CircleCanvas = () => {
     analytics.event.rollGame.complete();
   };
 
-  useDrawCircle({
+  useDrawWheel({
     canvasRef,
     radius,
     wheelColors,

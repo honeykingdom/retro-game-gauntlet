@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 
-import CircleCanvas from 'features/circle/CircleCanvas';
+import WheelCanvas from 'features/wheel/WheelCanvas';
 import Result from 'features/rollGame/Result';
 import { updateRolledGames } from 'features/rollGame/rollGameSlice';
 
@@ -24,7 +24,7 @@ const RollGame = ({ className }: Props) => {
 
   return (
     <RollGameRoot className={className}>
-      <CircleCanvas />
+      <WheelCanvas />
       <Result />
     </RollGameRoot>
   );

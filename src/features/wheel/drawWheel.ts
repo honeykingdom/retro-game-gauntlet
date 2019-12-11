@@ -1,4 +1,4 @@
-import { DrawState } from './useDrawCircle';
+import { DrawState } from 'features/wheel/useDrawWheel';
 
 const LINE_WIDTH = 4;
 

@@ -1,4 +1,4 @@
-import getTextWidth from 'features/circle/getTextWidth';
+import getTextWidth from 'features/wheel/getTextWidth';
 
 const sliceTextByMaxWidth = (text: string, font: string, maxWidth: number) => {
   const width = getTextWidth(text, font);

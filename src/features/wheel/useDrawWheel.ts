@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 
 import timingFunction from 'utils/timingFunction';
 import { GLOBAL_FONT } from 'utils/constants';
-import sliceTextByMaxWidth from 'features/circle/sliceTextByMaxWidth';
-import drawCircle from 'features/circle/drawCircle';
+import sliceTextByMaxWidth from 'features/wheel/sliceTextByMaxWidth';
+import drawWheel from 'features/wheel/drawWheel';
 import {
   isRollingSelector,
   rolledGamesSelector,
@@ -14,8 +14,8 @@ import {
   secondsToSpinSelector,
   speedSelector,
 } from 'features/options/optionsSlice';
-import useSoundsList from 'features/circle/useSoundsList';
-import { WheelColors } from 'features/circle/CircleCanvas';
+import useSoundsList from 'features/wheel/useSoundsList';
+import { WheelColors } from 'features/wheel/WheelCanvas';
 
 const wheelSoundTicks = [
   document.getElementById('wheel-sound-tick-1'),
@@ -170,7 +170,7 @@ const useDrawCircle = ({
     drawState.segmentAngle = getSegmentAngle(rolledGames.length);
 
     if (state.requestId === null) {
-      window.requestAnimationFrame(() => drawCircle(drawState));
+      window.requestAnimationFrame(() => drawWheel(drawState));
     }
   }, [state, drawState, rolledGames]);
 
@@ -180,7 +180,7 @@ const useDrawCircle = ({
     drawState.textFont = getTextFont(radius);
 
     if (state.requestId === null) {
-      window.requestAnimationFrame(() => drawCircle(drawState));
+      window.requestAnimationFrame(() => drawWheel(drawState));
     }
   }, [state, drawState, wheelColors, radius]);
 
@@ -208,7 +208,7 @@ const useDrawCircle = ({
     /* eslint-enable no-param-reassign */
 
     if (state.requestId === null) {
-      window.requestAnimationFrame(() => drawCircle(drawState));
+      window.requestAnimationFrame(() => drawWheel(drawState));
     }
   }, [canvasRef, state, drawState, drawState.scale, radius]);
 
@@ -255,7 +255,7 @@ const useDrawCircle = ({
 
       drawState.rotationAngle += deltaAngle;
 
-      drawCircle(drawState);
+      drawWheel(drawState);
 
       state.requestId = window.requestAnimationFrame(animate);
     };
