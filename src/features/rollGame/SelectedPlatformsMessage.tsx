@@ -17,62 +17,60 @@ const SelectedPlatformsMessage = () => {
     );
   }
 
-  if (selectedPlatformIds.length === platforms.length) {
-    return (
-      <Typography variant="h6" color="textSecondary">
-        Selected&nbsp;platforms:{' '}
+  const selectedPlatformsText = (
+    <>Selected&nbsp;platform{selectedPlatformIds.length === 1 ? '' : 's'}: </>
+  );
+
+  const renderSelectedPlatformsList = () => {
+    if (selectedPlatformIds.length === platforms.length) {
+      return (
         <Typography variant="inherit" color="textPrimary">
           All
         </Typography>
-      </Typography>
-    );
-  }
+      );
+    }
 
-  const selectedPlatforms = selectedPlatformIds
-    .slice(0, 3)
-    .map((id) => platforms.find(R.propEq('id', id)));
+    const selectedPlatforms = selectedPlatformIds
+      .slice(0, 3)
+      .map((id) => platforms.find(R.propEq('id', id))) as typeof platforms;
 
-  if (selectedPlatformIds.length === 1) {
-    return (
-      <Typography variant="h6" color="textSecondary">
-        Selected&nbsp;platform:{' '}
-        <Typography
-          variant="inherit"
-          color="textPrimary"
-          dangerouslySetInnerHTML={{
-            __html: replaceSpacesWithNbsp(selectedPlatforms[0]?.name || ''),
-          }}
-        />
-      </Typography>
-    );
-  }
-
-  return (
-    <Typography variant="h6" color="textSecondary">
-      Selected&nbsp;platforms:{' '}
-      {selectedPlatforms.map((platform, index) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <React.Fragment key={index}>
+    const selectedPlatformsList = selectedPlatforms.map(
+      ({ id, name }, index) => (
+        <React.Fragment key={id}>
           <Typography
             variant="inherit"
             color="textPrimary"
-            key={platform?.id}
             dangerouslySetInnerHTML={{
-              __html: replaceSpacesWithNbsp(platform?.name || ''),
+              __html: replaceSpacesWithNbsp(name),
             }}
           />
           {selectedPlatforms.length - 1 !== index && ', '}
         </React.Fragment>
-      ))}
-      {selectedPlatformIds.length > 3 && (
-        <>
-          {' and'}&nbsp;
-          <Typography variant="inherit" color="textPrimary">
-            {selectedPlatformIds.length - 3}
-          </Typography>
-          &nbsp;more
-        </>
-      )}
+      ),
+    );
+
+    const renderPlatformsMoreText = () => (
+      <>
+        {' and'}&nbsp;
+        <Typography variant="inherit" color="textPrimary">
+          {selectedPlatformIds.length - 3}
+        </Typography>
+        &nbsp;more
+      </>
+    );
+
+    return (
+      <>
+        {selectedPlatformsList}
+        {selectedPlatformIds.length > 3 && renderPlatformsMoreText()}
+      </>
+    );
+  };
+
+  return (
+    <Typography variant="h6" color="textSecondary">
+      {selectedPlatformsText}
+      {renderSelectedPlatformsList()}
     </Typography>
   );
 };
