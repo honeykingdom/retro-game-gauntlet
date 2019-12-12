@@ -1,13 +1,13 @@
+/* eslint-disable no-param-reassign */
 import { DrawState } from 'features/wheel/useDrawWheel';
 
 const LINE_WIDTH = 4;
 
-const meanAngleDeg = (angle1: number, angle2: number) => {
-  return Math.atan2(
+const meanAngleDeg = (angle1: number, angle2: number) =>
+  Math.atan2(
     (Math.sin(angle1) + Math.sin(angle2)) / 2,
     (Math.cos(angle1) + Math.cos(angle2)) / 2,
   );
-};
 
 const getX = (offset: number, radius: number, angle: number) =>
   offset + radius * Math.sin(angle);
@@ -15,7 +15,6 @@ const getX = (offset: number, radius: number, angle: number) =>
 const getY = (offset: number, radius: number, angle: number) =>
   offset + radius * Math.cos(angle);
 
-/* eslint-disable no-param-reassign */
 const drawCircle = ({
   context,
   segments,
@@ -72,6 +71,5 @@ const drawCircle = ({
 
   context.scale(scale, scale);
 };
-/* eslint-disable no-param-reassign */
 
 export default drawCircle;
