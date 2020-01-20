@@ -6,6 +6,7 @@ import { useTheme, Theme } from '@material-ui/core/styles';
 import { Typography, IconButton, Tooltip, AppBar } from '@material-ui/core';
 import DarkThemeIcon from '@material-ui/icons/Brightness7';
 import LightThemeIcon from '@material-ui/icons/Brightness4';
+import GitHubIcon from '@material-ui/icons/GitHub';
 
 import analytics from 'utils/analytics';
 import { BREAKPOINTS } from 'utils/constants';
@@ -35,9 +36,20 @@ const HeaderInner = styled.div`
     width: 1640px;
   }
 `;
-const ToggleThemeButton = styled(IconButton)`
-  position: absolute !important;
+const Buttons = styled.div`
   right: 8px;
+
+  & > :first-child {
+    display: none;
+  }
+
+  @media (min-width: 600px) {
+    position: absolute !important;
+
+    & > :first-child {
+      display: inline-flex;
+    }
+  }
 
   @media (min-width: ${BREAKPOINTS.lg}px) {
     right: 0;
@@ -69,11 +81,23 @@ const Header = ({ className }: Props) => {
         <Typography variant={windowSize.width < BREAKPOINTS.sm ? 'h5' : 'h4'}>
           Retro Game Gauntlet
         </Typography>
-        <Tooltip title="Toggle dark/light theme">
-          <ToggleThemeButton color="inherit" onClick={handleToggleTheme}>
-            {currentTheme === 'dark' ? <LightThemeIcon /> : <DarkThemeIcon />}
-          </ToggleThemeButton>
-        </Tooltip>
+        <Buttons>
+          <Tooltip title="GitHub Repository">
+            <IconButton
+              color="inherit"
+              href="//github.com/honeykingdom/rgg/"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <GitHubIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Toggle dark/light theme">
+            <IconButton color="inherit" onClick={handleToggleTheme}>
+              {currentTheme === 'dark' ? <LightThemeIcon /> : <DarkThemeIcon />}
+            </IconButton>
+          </Tooltip>
+        </Buttons>
       </HeaderInner>
     </HeaderRoot>
   );

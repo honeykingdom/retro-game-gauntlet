@@ -44,7 +44,6 @@ type Props = {
 
 const gamesListSourceUrl = '//nukecritic.com/rgg/';
 const authorUrl = '//github.com/DmitryScaletta';
-const reportBugUrl = '//github.com/honeykingdom/rgg/issues';
 
 const buildDateString = format(new Date(buildDate), 'P p');
 
@@ -58,17 +57,15 @@ const Footer = ({ className }: Props) => {
           Games in database:{' '}
           <Typography variant="inherit" color="textPrimary">
             {gamesCount}
-          </Typography>
-          <br />
-          Games list from:{' '}
-          <Typography variant="inherit" color="textPrimary">
-            <FooterLink
-              href={gamesListSourceUrl}
-              onClick={() => analytics.event.ui.link(gamesListSourceUrl)}
-            >
-              nukecritic.com/rgg/
-            </FooterLink>
-          </Typography>
+          </Typography>{' '}
+          (
+          <FooterLink
+            href={gamesListSourceUrl}
+            onClick={() => analytics.event.ui.link(gamesListSourceUrl)}
+          >
+            source
+          </FooterLink>
+          )
         </Typography>
 
         <Typography variant="inherit" color="textSecondary">
@@ -81,21 +78,12 @@ const Footer = ({ className }: Props) => {
               DmitryScaletta
             </FooterLink>
           </Typography>
-          <br />
-          Last update:{' '}
-          <Typography variant="inherit" color="textPrimary">
-            {buildDateString}
-          </Typography>
         </Typography>
 
         <Typography variant="inherit" color="textSecondary">
+          Last update:{' '}
           <Typography variant="inherit" color="textPrimary">
-            <FooterLink
-              href={reportBugUrl}
-              onClick={() => analytics.event.ui.link(reportBugUrl)}
-            >
-              Report a bug
-            </FooterLink>
+            {buildDateString}
           </Typography>
         </Typography>
       </FooterInner>
