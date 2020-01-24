@@ -76,8 +76,6 @@ const drawCircle = ({
     context.fillText(segment.name, 0, 4);
     context.restore();
   });
-
-  context.scale(scale, scale);
 };
 
 export default drawCircle;
