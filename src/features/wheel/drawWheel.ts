@@ -42,16 +42,27 @@ const drawCircle = ({
   context.fillStyle = wheelColors.wheelBackground;
   context.fill();
 
+  context.beginPath();
+  context.arc(radius, radius, radius - LINE_WIDTH / 2, 0, 2 * Math.PI);
+  context.strokeStyle = wheelColors.border;
+  context.lineWidth = LINE_WIDTH;
+
+  segments.forEach((_, i) => {
+    const lineX = getX(radius, radius, i * segmentAngle);
+    const lineY = getY(radius, radius, i * segmentAngle);
+
+    context.moveTo(lineX, lineY);
+    context.lineTo(radius, radius);
+  });
+
+  context.stroke();
+
+  context.font = textFont;
+  context.fillStyle = wheelColors.text;
+
   segments.forEach((segment, i) => {
     const from = i * segmentAngle;
     const to = (i + 1) * segmentAngle;
-
-    context.beginPath();
-    context.arc(radius, radius, radius - LINE_WIDTH / 2, from, to);
-    context.lineTo(radius, radius);
-    context.strokeStyle = wheelColors.border;
-    context.lineWidth = LINE_WIDTH;
-    context.stroke();
 
     const meanAngle = meanAngleDeg(from, to);
     const textAngleRotation = meanAngle + Math.PI;
@@ -62,9 +73,6 @@ const drawCircle = ({
     context.save();
     context.translate(textX, textY);
     context.rotate(textAngleRotation);
-    context.beginPath();
-    context.font = textFont;
-    context.fillStyle = wheelColors.text;
     context.fillText(segment.name, 0, 4);
     context.restore();
   });
