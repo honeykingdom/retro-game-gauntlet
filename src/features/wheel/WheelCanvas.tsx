@@ -31,6 +31,8 @@ const CircleCanvasRoot = styled.div<CircleCanvasRootProps>`
   height: ${(p) => p.height}px;
 `;
 const Canvas = styled.canvas`
+  position: relative;
+  z-index: 0;
   display: block;
   width: ${(p) => p.width}px;
   height: ${(p) => p.height}px;
