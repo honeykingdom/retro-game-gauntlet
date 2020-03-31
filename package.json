@@ -21,7 +21,8 @@
     "react-scrollbars-custom": "^4.0.21",
     "react-use": "^13.27.1",
     "redux-thunk": "^2.3.0",
-    "styled-components": "^5.0.1"
+    "styled-components": "^5.0.1",
+    "use-sound": "^1.0.1"
   },
   "devDependencies": {
     "@babel/helper-call-delegate": "^7.8.7",
