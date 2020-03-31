@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import { Button, Box } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import YouTubeIcon from '@material-ui/icons/YouTube';
+import GetAppIcon from '@material-ui/icons/GetApp';
 
 import analytics from 'utils/analytics';
 import {
@@ -56,16 +57,19 @@ const getLinks = (name: string) => {
       id: 'emuparadise',
       text: 'EmuParadise',
       href: `//www.emuparadise.me/roms/search.php?query=${searchQuery}&section=all`,
+      icon: <GetAppIcon />,
     },
     {
       id: 'coolrom',
       text: 'CoolROM',
       href: `//coolrom.com.au/search?q=${searchQuery}`,
+      icon: <GetAppIcon />,
     },
     {
       id: 'romhustler',
       text: 'RomHustler',
       href: `//romhustler.org/roms/search/?q=${searchQuery}`,
+      icon: <GetAppIcon />,
     },
   ];
 };
