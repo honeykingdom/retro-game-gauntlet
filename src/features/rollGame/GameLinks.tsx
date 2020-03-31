@@ -53,11 +53,6 @@ const getLinks = (name: string) => {
       href: `https://www.google.com/search?q=${searchQuery}%20site%3Ahowlongtobeat.com`,
     },
     {
-      id: 'gamerankings',
-      text: 'GameRankings',
-      href: `https://www.gamerankings.com/search.html?search=${searchQuery}&site=`,
-    },
-    {
       id: 'emuparadise',
       text: 'EmuParadise',
       href: `//www.emuparadise.me/roms/search.php?query=${searchQuery}&section=all`,
