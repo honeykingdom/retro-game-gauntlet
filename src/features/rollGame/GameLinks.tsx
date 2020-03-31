@@ -28,7 +28,7 @@ const Links = styled.div`
 
 const getLinks = (name: string) => {
   // TODO: check other symbols and remove double spaces
-  const searchQuery = encodeURI(name.replace(/&/g, ''));
+  const searchQuery = encodeURI(name.replace(/[&:]/g, ''));
 
   return [
     {
