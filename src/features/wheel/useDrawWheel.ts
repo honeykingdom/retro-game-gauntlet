@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import useSound from 'use-sound';
 
 import timingFunction from 'utils/timingFunction';
 import { GLOBAL_FONT } from 'utils/constants';
@@ -14,18 +15,12 @@ import {
   secondsToSpinSelector,
   speedSelector,
 } from 'features/options/optionsSlice';
-import useSoundsList from 'features/wheel/useSoundsList';
 import { WheelColors } from 'features/wheel/WheelCanvas';
 
-const wheelSoundTicks = [
-  document.getElementById('wheel-sound-tick-1'),
-  document.getElementById('wheel-sound-tick-2'),
-  document.getElementById('wheel-sound-tick-3'),
-] as HTMLAudioElement[];
-
-const wheelSoundComplete = document.getElementById(
-  'wheel-sound-complete',
-) as HTMLAudioElement;
+/* eslint-disable @typescript-eslint/no-var-requires */
+const wheelTickSfx = require('features/wheel/sounds/wheel-tick.mp3');
+const wheelCompleteSfx = require('features/wheel/sounds/wheel-complete.mp3');
+/* eslint-enable @typescript-eslint/no-var-requires */
 
 type OnRollComplete = (id: number) => void;
 
@@ -131,7 +126,8 @@ const useDrawCircle = ({
   const secondsToSpin = useSelector(secondsToSpinSelector);
   const rolledGames = useSelector(rolledGamesSelector);
 
-  const playTick = useSoundsList(wheelSoundTicks);
+  const [playTick] = useSound(wheelTickSfx);
+  const [playComplete] = useSound(wheelCompleteSfx);
 
   const stateRef = useRef<State>();
   const drawStateRef = useRef<DrawState>();
@@ -236,7 +232,8 @@ const useDrawCircle = ({
 
       if (state.fullTime > state.secondsToSpin * 1000) {
         state.onRollComplete(state.currentIndex);
-        wheelSoundComplete.play();
+        // TODO: remove options object
+        playComplete({});
         stop();
 
         return;
@@ -245,7 +242,8 @@ const useDrawCircle = ({
       const currentIndex = getGameIndexByAngle(drawState);
 
       if (state.currentIndex !== currentIndex) {
-        playTick();
+        // TODO: remove options object
+        playTick({});
         state.currentIndex = currentIndex;
       }
 
@@ -280,7 +278,7 @@ const useDrawCircle = ({
 
     // eslint-disable-next-line consistent-return
     return () => stop();
-  }, [state, drawState, playTick]);
+  }, [state, drawState, playTick, playComplete]);
 
   useEffect(() => {
     if (isRolling) {
