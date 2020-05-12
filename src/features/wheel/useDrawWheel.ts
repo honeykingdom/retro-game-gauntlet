@@ -230,8 +230,7 @@ const useDrawCircle = ({
 
       if (state.fullTime > state.secondsToSpin * 1000) {
         state.onRollComplete(state.currentIndex);
-        // TODO: remove options object
-        playComplete({});
+        playComplete();
         stop();
 
         return;
@@ -240,8 +239,7 @@ const useDrawCircle = ({
       const currentIndex = getGameIndexByAngle(drawState);
 
       if (state.currentIndex !== currentIndex) {
-        // TODO: remove options object
-        playTick({});
+        playTick();
         state.currentIndex = currentIndex;
       }
 
