@@ -17,10 +17,8 @@ import {
 } from 'features/options/optionsSlice';
 import { WheelColors } from 'features/wheel/WheelCanvas';
 
-/* eslint-disable @typescript-eslint/no-var-requires */
-const wheelTickSfx = require('features/wheel/sounds/wheel-tick.mp3');
-const wheelCompleteSfx = require('features/wheel/sounds/wheel-complete.mp3');
-/* eslint-enable @typescript-eslint/no-var-requires */
+import wheelTickSfx from 'features/wheel/sounds/wheel-tick.mp3';
+import wheelCompleteSfx from 'features/wheel/sounds/wheel-complete.mp3';
 
 type OnRollComplete = (id: number) => void;
 
