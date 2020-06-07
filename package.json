@@ -7,10 +7,15 @@
     "@material-ui/core": "^4.9.14",
     "@material-ui/icons": "^4.9.1",
     "@reduxjs/toolkit": "^1.3.6",
+    "app": "link:src/app",
+    "components": "link:src/components",
     "d3-array": "^2.4.0",
     "d3-ease": "^1.0.6",
+    "data": "link:src/data",
     "date-fns": "^2.14.0",
     "debounce": "^1.2.0",
+    "features": "link:src/features",
+    "icons": "link:src/icons",
     "preval.macro": "^5.0.0",
     "ramda": "^0.27.0",
     "react": "^16.13.1",
@@ -21,8 +26,9 @@
     "react-scrollbars-custom": "^4.0.21",
     "react-use": "^15.1.0",
     "redux-thunk": "^2.3.0",
-    "styled-components": "^5.1.0",
-    "use-sound": "^1.0.2"
+    "styles": "link:src/styles",
+    "use-sound": "^1.0.2",
+    "utils": "link:src/utils"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.7.0",
@@ -51,8 +57,8 @@
     "typescript": "^3.9.2"
   },
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "predeploy": "yarn build",
+    "deploy": "yarn predeploy && gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test"
@@ -67,7 +73,6 @@
     },
     "extends": [
       "airbnb-typescript",
-      "airbnb/hooks",
       "plugin:@typescript-eslint/recommended",
       "prettier",
       "prettier/react",
