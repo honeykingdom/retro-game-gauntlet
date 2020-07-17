@@ -3,6 +3,10 @@
 # dependencies
 /node_modules
 /.pnp
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
 .pnp.js
 
 # testing
@@ -23,4 +27,4 @@ yarn-debug.log*
 yarn-error.log*
 
 .vscode
-.yarn
+
