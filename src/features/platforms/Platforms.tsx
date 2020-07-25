@@ -3,7 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import Scrollbar from 'react-scrollbars-custom';
 import { useWindowSize } from 'react-use';
-import { Typography, List, Button, Box, ListItem } from '@material-ui/core';
+import {
+  Typography,
+  List,
+  Button,
+  Box,
+  ListItem,
+  useTheme,
+} from '@material-ui/core';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 
@@ -40,12 +47,18 @@ const PlatformsList = styled.div<{ isDisabled: boolean }>`
       pointer-events: none;
     `};
 `;
+const Buttons = styled(Box)`
+  margin-left: 1px;
+  color: ${(p) => p.theme.palette.text.secondary};
+`;
 
 const Platforms = () => {
   const dispatch = useDispatch();
   const [isVisible, setIsVisible] = useState(true);
   const isRolling = useSelector(isRollingSelector);
   const selectedPlatformIds = useSelector(selectedPlatformIdsSelector);
+
+  const theme = useTheme();
 
   const windowSize = useWindowSize();
 
@@ -92,7 +105,7 @@ const Platforms = () => {
 
   const renderPlatformsList = () => (
     <PlatformsList isDisabled={isRolling}>
-      <Box component="span" mb={1} style={{ marginLeft: 1 }}>
+      <Buttons component="span" mb={1} theme={theme}>
         <Button
           color="inherit"
           size="small"
@@ -116,7 +129,7 @@ const Platforms = () => {
         >
           Select None
         </Button>
-      </Box>
+      </Buttons>
       <Scrollbar
         style={{ flexGrow: 1 }}
         native={windowSize.width < BREAKPOINTS.lg}
