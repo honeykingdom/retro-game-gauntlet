@@ -2,7 +2,6 @@
   "name": "rgg",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://honeykingdom.github.io/rgg",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
@@ -49,7 +48,6 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.3",
     "eslint-plugin-react-hooks": "^4.0.8",
-    "gh-pages": "^3.1.0",
     "prettier": "^2.0.5",
     "prop-types": "^15.7.2",
     "tiny-warning": "^1.0.3",
@@ -57,8 +55,6 @@
     "typescript": "^3.9.7"
   },
   "scripts": {
-    "predeploy": "yarn build",
-    "deploy": "yarn predeploy && gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test"
