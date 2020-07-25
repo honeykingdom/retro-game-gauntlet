@@ -1,6 +1,6 @@
 # Retro Game Gauntlet
 
-https://honeykingdom.github.io/rgg/
+https://retrogamegauntlet.netlify.app/
 
 ### Sources
 
