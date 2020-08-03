@@ -28,24 +28,20 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --immutable
-        env:
-          CI: true
 
       # - name: Test
       #   run: yarn test --ci --coverage --maxWorkers=2
-      #   env:
-      #     CI: true
 
       - name: Build
         run: yarn build
-        env:
-          CI: true
 
-      - name: Deploy production to Netlify
-        uses: South-Paw/action-netlify-deploy@v1.0.4
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v1.1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
-          build-dir: './build'
-          comment-on-commit: true
+          publish-dir: './build'
+          production-deploy: true
+          enable-commit-comment: false
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 1
