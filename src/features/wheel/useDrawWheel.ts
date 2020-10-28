@@ -52,8 +52,8 @@ type State = {
   currentIndex: number;
   secondsToSpin: number;
   speed: number;
-  start: Function;
-  stop: Function;
+  start: () => void;
+  stop: () => void;
   onRollComplete: OnRollComplete;
 };
 
@@ -150,7 +150,6 @@ const useDrawCircle = ({
 
   useEffect(() => {
     drawState.context = canvasRef.current?.getContext('2d');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [drawState, canvasRef, canvasRef.current]);
 
   useEffect(() => {

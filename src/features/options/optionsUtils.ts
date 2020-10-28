@@ -1,6 +1,6 @@
 import { LS_OPTIONS } from 'utils/constants';
 
-export const writeOptionsToLocalStorage = (options: object) => {
+export const writeOptionsToLocalStorage = (options: Record<string, any>) => {
   localStorage.setItem(LS_OPTIONS, JSON.stringify(options));
 };
 

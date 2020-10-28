@@ -7,6 +7,7 @@ import * as colors from '@material-ui/core/colors';
 type Props = {
   id: string;
   name: string;
+  // eslint-disable-next-line react/no-unused-prop-types
   releaseDate: string;
   gamesCount: number;
   checked: boolean;
