@@ -30,6 +30,7 @@ const Links = styled.div`
 const getLinks = (name: string) => {
   // TODO: check other symbols and remove double spaces
   const searchQuery = encodeURI(name.replace(/[&:]/g, ''));
+  const searchQueryGameFaqs = searchQuery.replace(/%20/g, '+');
 
   return [
     {
@@ -41,7 +42,7 @@ const getLinks = (name: string) => {
     {
       id: 'gamefaqs',
       text: 'GameFAQs',
-      href: `//gamefaqs.gamespot.com/search?game=${searchQuery}`,
+      href: `//gamefaqs.gamespot.com/search?game=${searchQueryGameFaqs}`,
     },
     {
       id: 'metacritic',
