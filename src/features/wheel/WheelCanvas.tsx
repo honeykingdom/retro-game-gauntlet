@@ -70,23 +70,18 @@ const RollButton = styled.button<RollButtonProps>`
   }
 `;
 type ArrowRightIconProps = {
-  bgColor: string;
-  borderColor: string;
+  $bgColor: string;
+  $borderColor: string;
 };
-// TODO: remove this after styled-components fix this
-/* eslint-disable react/jsx-props-no-spreading, @typescript-eslint/no-unused-vars */
-const ArrowRightSvgFiltered = ({ bgColor, borderColor, ...rest }: any) => (
-  <ArrowRightSvg {...rest} />
-);
-const ArrowRightIcon = styled(ArrowRightSvgFiltered)<ArrowRightIconProps>`
+const ArrowRightIcon = styled(ArrowRightSvg)<ArrowRightIconProps>`
   position: absolute;
   top: 50%;
   left: 1px;
   width: 32px;
   height: 32px;
   transform: translateY(-50%);
-  fill: ${(p) => p.bgColor};
-  stroke: ${(p) => p.borderColor};
+  fill: ${(p) => p.$bgColor};
+  stroke: ${(p) => p.$borderColor};
 `;
 
 export type WheelColors = {
@@ -175,8 +170,8 @@ const CircleCanvas = () => {
         Roll
       </RollButton>
       <ArrowRightIcon
-        bgColor={wheelColors.wheelBackground}
-        borderColor={wheelColors.border}
+        $bgColor={wheelColors.wheelBackground}
+        $borderColor={wheelColors.border}
       />
     </CircleCanvasRoot>
   );
