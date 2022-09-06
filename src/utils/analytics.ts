@@ -1,5 +1,3 @@
-import ReactGA from 'react-ga';
-
 const CATEGORIES = {
   rollGame: 'Roll Game',
   searchLinks: 'Search Links',
@@ -7,19 +5,26 @@ const CATEGORIES = {
   userInterface: 'User Interface',
 };
 
-const initialize = () => ReactGA.initialize('UA-139550930-4');
-
-const pageview = (page: string) => ReactGA.pageview(page);
-
-const sendEvent = (eventArgs: ReactGA.EventArgs) => {
-  if (process.env.NODE_ENV !== 'production') {
-    // console.log(eventArgs);
-  } else {
-    ReactGA.event(eventArgs);
-  }
+type SendEventArgs = {
+  action: string;
+  category: typeof CATEGORIES[keyof typeof CATEGORIES];
+  label?: string;
+  value?: number;
 };
 
-const event = {
+const sendEvent = ({ action, category, label, value }: SendEventArgs) => {
+  if (process.env.NODE_ENV !== 'production') {
+    return;
+  }
+
+  window.gtag('event', action, {
+    event_category: category,
+    event_label: label,
+    value,
+  });
+};
+
+const analytics = {
   rollGame: {
     start: () =>
       sendEvent({
@@ -97,8 +102,4 @@ const event = {
   },
 };
 
-export default {
-  initialize,
-  pageview,
-  event,
-};
+export default analytics;
