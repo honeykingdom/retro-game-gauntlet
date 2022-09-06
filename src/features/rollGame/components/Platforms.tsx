@@ -1,8 +1,4 @@
-import React, { useState, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import styled, { css } from 'styled-components';
-import Scrollbar from 'react-scrollbars-custom';
-import { useWindowSize } from 'react-use';
+import React, { useState } from 'react';
 import {
   Typography,
   List,
@@ -10,29 +6,30 @@ import {
   Box,
   ListItem,
   useTheme,
-} from '@material-ui/core';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-
+  styled,
+} from '@mui/material';
+import { css } from '@emotion/react';
+import Scrollbar from 'react-scrollbars-custom';
+import { useEffectOnce, useWindowSize } from 'react-use';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 import analytics from 'utils/analytics';
 import { BREAKPOINTS } from 'utils/constants';
-import Platform from 'features/platforms/Platform';
+import Platform from './Platform';
 import {
-  selectPlatform,
-  togglePlatform,
-  updateOption,
-  selectedPlatformIdsSelector,
-} from 'features/options/optionsSlice';
-import { isRollingSelector } from 'features/rollGame/rollGameSlice';
-
+  isRollingSelector,
+  platformsChanged,
+  selectedPlatformsSelector,
+} from '../rollGameSlice';
 import platforms from 'data/platforms.json';
 
-const PlatformsRoot = styled.div`
+const PlatformsRoot = styled('div')`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 `;
-const PlatformsList = styled.div<{ isDisabled: boolean }>`
+const PlatformsList = styled('div')<{ isDisabled: boolean }>`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -53,10 +50,10 @@ const Buttons = styled(Box)`
 `;
 
 const Platforms = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [isVisible, setIsVisible] = useState(true);
-  const isRolling = useSelector(isRollingSelector);
-  const selectedPlatformIds = useSelector(selectedPlatformIdsSelector);
+  const isRolling = useAppSelector(isRollingSelector);
+  const selectedPlatforms = useAppSelector(selectedPlatformsSelector);
 
   const theme = useTheme();
 
@@ -64,43 +61,31 @@ const Platforms = () => {
 
   const handleToggleIsVisible = () => {
     setIsVisible(!isVisible);
-    analytics.event.ui.platforms(!isVisible);
+    analytics.ui.platforms(!isVisible);
   };
 
-  const handleNameClick = useCallback(
-    (id: string) => {
-      dispatch(selectPlatform(id));
-      analytics.event.platforms.platformNameClick(id);
-    },
-    [dispatch],
-  );
+  const handleNameClick = (id: string) => {
+    dispatch(platformsChanged([id]));
+    analytics.platforms.platformNameClick(id);
+  };
 
-  const handleCheckboxClick = useCallback(
-    (id: string) => {
-      dispatch(togglePlatform(id));
-      analytics.event.platforms.platformCheckboxClick(id);
-    },
-    [dispatch],
-  );
+  const handleCheckboxClick = (id: string) => {
+    const newSelectedPlatforms = selectedPlatforms.includes(id)
+      ? selectedPlatforms.filter((platformId) => platformId !== id)
+      : [...selectedPlatforms, id];
+
+    dispatch(platformsChanged(newSelectedPlatforms));
+    analytics.platforms.platformCheckboxClick(id);
+  };
 
   const handleSelectAll = () => {
-    dispatch(
-      updateOption({
-        name: 'selectedPlatformIds',
-        value: platforms.map(({ id }) => id),
-      }),
-    );
-    analytics.event.platforms.selectAll();
+    dispatch(platformsChanged(platforms.map(({ id }) => id)));
+    analytics.platforms.selectAll();
   };
 
   const handleSelectNone = () => {
-    dispatch(
-      updateOption({
-        name: 'selectedPlatformIds',
-        value: [],
-      }),
-    );
-    analytics.event.platforms.selectNone();
+    dispatch(platformsChanged([]));
+    analytics.platforms.selectNone();
   };
 
   const renderPlatformsList = () => (
@@ -142,7 +127,7 @@ const Platforms = () => {
               name={name}
               releaseDate={releaseDate}
               gamesCount={gamesCount}
-              checked={selectedPlatformIds.includes(id)}
+              checked={selectedPlatforms.includes(id)}
               onNameClick={handleNameClick}
               onCheckboxClick={handleCheckboxClick}
             />
@@ -156,7 +141,7 @@ const Platforms = () => {
     <Scrollbar native={windowSize.width < BREAKPOINTS.lg}>
       <List>
         {platforms
-          .filter(({ id }) => selectedPlatformIds.includes(id))
+          .filter(({ id }) => selectedPlatforms.includes(id))
           .map(({ id, name }) => (
             <ListItem key={id} style={{ padding: 0, marginBottom: 8 }}>
               {name}
@@ -171,7 +156,7 @@ const Platforms = () => {
       <Box display="flex" justifyContent="space-between" mb={1}>
         <Typography variant="h5">Platforms</Typography>
         <Button
-          color="default"
+          color="primary"
           variant="contained"
           size="small"
           onClick={handleToggleIsVisible}

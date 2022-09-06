@@ -1,19 +1,15 @@
 import React from 'react';
-import styled from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
+import styled from '@emotion/styled';
 import { useWindowSize } from 'react-use';
-import { useTheme, Theme } from '@material-ui/core/styles';
-import { Typography, IconButton, Tooltip, AppBar } from '@material-ui/core';
-import DarkThemeIcon from '@material-ui/icons/Brightness7';
-import LightThemeIcon from '@material-ui/icons/Brightness4';
-import GitHubIcon from '@material-ui/icons/GitHub';
-
+import { useTheme, Theme } from '@mui/material';
+import { Typography, IconButton, Tooltip, AppBar } from '@mui/material';
+import DarkThemeIcon from '@mui/icons-material//Brightness7';
+import LightThemeIcon from '@mui/icons-material//Brightness4';
+import GitHubIcon from '@mui/icons-material//GitHub';
+import { useAppSelector, useAppDispatch } from 'app/hooks';
 import analytics from 'utils/analytics';
 import { BREAKPOINTS } from 'utils/constants';
-import {
-  currentThemeSelector,
-  updateOption,
-} from 'features/options/optionsSlice';
+import { optionChanged, themeSelector } from '../rollGameSlice';
 
 const HeaderRoot = styled(AppBar)<{ theme: Theme }>`
   background-color: ${(p) => p.theme.palette.background.default} !important;
@@ -39,14 +35,14 @@ const HeaderInner = styled.div`
 const Buttons = styled.div`
   right: 8px;
 
-  & > :first-child {
+  & > :first-of-type {
     display: none;
   }
 
   @media (min-width: 600px) {
     position: absolute !important;
 
-    & > :first-child {
+    & > :first-of-type {
       display: inline-flex;
     }
   }
@@ -61,18 +57,18 @@ type Props = {
 };
 
 const Header = ({ className }: Props) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const theme = useTheme();
   const windowSize = useWindowSize();
-  const currentTheme = useSelector(currentThemeSelector);
+  const mode = useAppSelector(themeSelector);
 
   const handleToggleTheme = () => {
-    const name = 'currentTheme';
-    const value = currentTheme === 'dark' ? 'light' : 'dark';
+    const name = 'theme';
+    const value = mode === 'dark' ? 'light' : 'dark';
 
-    analytics.event.ui.changeOption(name, value === 'dark' ? 1 : 0);
-    dispatch(updateOption({ name, value }));
+    analytics.ui.changeOption(name, value === 'dark' ? 1 : 0);
+    dispatch(optionChanged({ name, newValue: value }));
   };
 
   return (
@@ -94,7 +90,7 @@ const Header = ({ className }: Props) => {
           </Tooltip>
           <Tooltip title="Toggle dark/light theme">
             <IconButton color="inherit" onClick={handleToggleTheme}>
-              {currentTheme === 'dark' ? <LightThemeIcon /> : <DarkThemeIcon />}
+              {mode === 'dark' ? <LightThemeIcon /> : <DarkThemeIcon />}
             </IconButton>
           </Tooltip>
         </Buttons>

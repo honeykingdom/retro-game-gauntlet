@@ -1,17 +1,12 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
-import { Button, Box } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
-import YouTubeIcon from '@material-ui/icons/YouTube';
-import GetAppIcon from '@material-ui/icons/GetApp';
-
+import styled from '@emotion/styled';
+import { Button, Box, Typography } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import GetAppIcon from '@mui/icons-material/GetApp';
+import { useAppSelector } from 'app/hooks';
 import analytics from 'utils/analytics';
-import {
-  isRollingSelector,
-  rolledGameSelector,
-} from 'features/rollGame/rollGameSlice';
+import { isRollingSelector, rolledGameSelector } from '../rollGameSlice';
 
 const GameLinksRoot = styled.div``;
 const ServiceLink = styled(Button)<{ target?: string; rel?: string }>`
@@ -76,8 +71,8 @@ const getLinks = (name: string) => {
 };
 
 const GameLinks = () => {
-  const isRolling = useSelector(isRollingSelector);
-  const rolledGame = useSelector(rolledGameSelector);
+  const isRolling = useAppSelector(isRollingSelector);
+  const rolledGame = useAppSelector(rolledGameSelector);
 
   if (isRolling || !rolledGame) return null;
 
@@ -100,11 +95,19 @@ const GameLinks = () => {
             href={href}
             target="_blank"
             rel="noreferrer noopener"
-            onClick={() => analytics.event.searchLink(id)}
+            onClick={() => analytics.searchLink(id)}
           >
-            <Typography variant="inherit" color="textSecondary">
+            <Typography
+              variant="inherit"
+              color="textSecondary"
+              component="span"
+            >
               Search on{' '}
-              <Typography variant="inherit" color="textPrimary">
+              <Typography
+                variant="inherit"
+                color="textPrimary"
+                component="span"
+              >
                 {text}
               </Typography>
             </Typography>

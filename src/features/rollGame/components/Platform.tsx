@@ -1,8 +1,5 @@
 import React from 'react';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
-import * as colors from '@material-ui/core/colors';
+import { colors, ListItem, ListItemText, Checkbox } from '@mui/material';
 
 type Props = {
   id: string;

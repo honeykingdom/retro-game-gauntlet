@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
-import styled, { css } from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
+import styled from '@emotion/styled';
+import { css } from '@emotion/react';
+import { Button, Box, Typography, Slider } from '@mui/material';
 import debounce from 'debounce';
-import Typography from '@material-ui/core/Typography';
-import { Button, Box, Mark } from '@material-ui/core';
-
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 import analytics from 'utils/analytics';
-import PrettoSlider from 'components/PrettoSlider';
 import {
+  isRollingSelector,
+  numberOfGamesSelector,
+  optionChanged,
   secondsToSpinSelector,
   speedSelector,
-  numberOfGamesSelector,
-  updateOption,
-  OptionName,
-} from 'features/options/optionsSlice';
-import { isRollingSelector } from 'features/rollGame/rollGameSlice';
-import options from 'features/options/options.mock';
+} from '../rollGameSlice';
+import options from '../optionsConstants';
+import { OptionName } from '../rollGameTypes';
 
 const OptionsRoot = styled.div`
   display: flex;
@@ -39,7 +37,7 @@ type OptionSlider = {
   step: number;
   min: number;
   max: number;
-  marks: Mark[];
+  marks: Parameters<typeof Slider>[0]['marks'];
 };
 type Option = {
   id: OptionName;
@@ -48,14 +46,14 @@ type Option = {
 };
 
 const Options = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [isVisible, setIsVisible] = useState(false);
 
-  const isRolling = useSelector(isRollingSelector);
-  const secondsToSpin = useSelector(secondsToSpinSelector);
-  const speed = useSelector(speedSelector);
-  const numberOfGames = useSelector(numberOfGamesSelector);
+  const isRolling = useAppSelector(isRollingSelector);
+  const secondsToSpin = useAppSelector(secondsToSpinSelector);
+  const speed = useAppSelector(speedSelector);
+  const numberOfGames = useAppSelector(numberOfGamesSelector);
 
   const values: Record<string, number> = {
     secondsToSpin,
@@ -65,13 +63,13 @@ const Options = () => {
 
   const handleToggleIsVisible = () => {
     setIsVisible(!isVisible);
-    analytics.event.ui.options(!isVisible);
+    analytics.ui.options(!isVisible);
   };
 
   const handleOptionChange = (name: OptionName) =>
     debounce((event: any, value: number | number[]) => {
-      dispatch(updateOption({ name, value }));
-      analytics.event.ui.changeOption(name, (value as unknown) as number);
+      dispatch(optionChanged({ name, newValue: value as number }));
+      analytics.ui.changeOption(name, value as unknown as number);
     }, 500);
 
   const renderSlider = (
@@ -79,7 +77,7 @@ const Options = () => {
     value: number,
     onChange: (event: any, value: number | number[]) => void,
   ) => (
-    <PrettoSlider
+    <Slider
       defaultValue={value}
       step={step}
       min={min}
@@ -110,7 +108,7 @@ const Options = () => {
       <Box display="flex" justifyContent="space-between" mb={1}>
         <Typography variant="h5">Options</Typography>
         <Button
-          color="default"
+          color="primary"
           variant="contained"
           size="small"
           onClick={handleToggleIsVisible}

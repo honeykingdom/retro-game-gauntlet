@@ -1,12 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
-import { Typography, Link, useTheme, Theme } from '@material-ui/core';
-import { format } from 'date-fns';
-
+import styled from '@emotion/styled';
+import { Typography, Link, useTheme, Theme } from '@mui/material';
 import analytics from 'utils/analytics';
 import { BREAKPOINTS } from 'utils/constants';
-import buildDate from 'utils/buildDate';
-import { gamesCount } from 'features/rollGame/rollGameUtils';
+import { gamesCount } from '../rollGameUtils';
 
 const FooterRoot = styled.footer<{ theme: Theme }>`
   display: flex;
@@ -30,11 +27,6 @@ const FooterInner = styled(Typography)`
     text-align: left;
   }
 `;
-const FooterLink = styled(Link).attrs({
-  rel: 'noreferrer noopener',
-  target: '_blank',
-  color: 'inherit',
-})``;
 
 type Props = {
   className?: string;
@@ -45,45 +37,42 @@ type Props = {
 const gamesListSourceUrl = '//nukecritic.com/rgg/';
 const authorUrl = '//github.com/DmitryScaletta';
 
-const buildDateString = format(new Date(buildDate), 'P p');
-
 const Footer = ({ className }: Props) => {
   const theme = useTheme();
 
   return (
     <FooterRoot className={className} theme={theme}>
       <FooterInner>
-        <Typography variant="inherit" color="textSecondary">
+        <Typography variant="inherit" component="span" color="textSecondary">
           Games in database:{' '}
-          <Typography variant="inherit" color="textPrimary">
+          <Typography variant="inherit" component="span" color="textPrimary">
             {gamesCount}
           </Typography>{' '}
           (
-          <FooterLink
+          <Link
+            rel="noreferrer noopener"
+            target="_blank"
+            color="inherit"
             href={gamesListSourceUrl}
-            onClick={() => analytics.event.ui.link(gamesListSourceUrl)}
+            onClick={() => analytics.ui.link(gamesListSourceUrl)}
           >
             source
-          </FooterLink>
+          </Link>
           )
         </Typography>
 
-        <Typography variant="inherit" color="textSecondary">
+        <Typography variant="inherit" component="span" color="textSecondary">
           Author:{' '}
-          <Typography variant="inherit" color="textPrimary">
-            <FooterLink
+          <Typography variant="inherit" component="span" color="textPrimary">
+            <Link
+              rel="noreferrer noopener"
+              target="_blank"
+              color="inherit"
               href={authorUrl}
-              onClick={() => analytics.event.ui.link(authorUrl)}
+              onClick={() => analytics.ui.link(authorUrl)}
             >
               DmitryScaletta
-            </FooterLink>
-          </Typography>
-        </Typography>
-
-        <Typography variant="inherit" color="textSecondary">
-          Last update:{' '}
-          <Typography variant="inherit" color="textPrimary">
-            {buildDateString}
+            </Link>
           </Typography>
         </Typography>
       </FooterInner>

@@ -1,80 +1,98 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-import { RootState } from 'app/rootReducer';
-import { AppDispatch } from 'app/store';
+import { RootState } from 'app/store';
+import { LS } from 'utils/constants';
+import { lsRead, lsWrite } from 'utils/ls';
+import type {
+  OptionName,
+  Options,
+  RolledGame,
+  RollGameState,
+} from './rollGameTypes';
 import {
-  numberOfGamesSelector,
-  selectedPlatformIdsSelector,
-} from 'features/options/optionsSlice';
-import { getRandomGames } from 'features/rollGame/rollGameUtils';
-import { RolledGame } from 'features/rollGame/rollGameTypes';
+  DEFAULT_OPTIONS,
+  DEFAULT_SELECTED_PLATFORMS,
+} from './rollGameConstants';
 
-interface RollGameState {
-  isRolling: boolean;
-  gameIndex: number | null;
-  rolledGames: RolledGame[];
-}
+const getInitialOptions = (): Options =>
+  typeof window === 'undefined'
+    ? DEFAULT_OPTIONS
+    : { ...DEFAULT_OPTIONS, ...lsRead(LS.Options) };
 
 const initialState: RollGameState = {
   isRolling: false,
-  gameIndex: null,
-  rolledGames: [],
+  rolledGame: null,
+  selectedPlatforms: DEFAULT_SELECTED_PLATFORMS,
+  options: getInitialOptions(),
+};
+
+type OptionUpdatedPayload = {
+  name: OptionName;
+  newValue: Options[OptionName];
 };
 
 const rollGame = createSlice({
   name: 'rollGame',
   initialState,
   reducers: {
-    updateRolledGamesThunk: (
-      state,
-      { payload }: PayloadAction<RolledGame[]>,
-    ) => {
-      state.rolledGames = payload;
-    },
-    rollGameStart: (state) => {
+    rollGameStarted: (state) => {
       state.isRolling = true;
-      state.gameIndex = null;
+      state.rolledGame = null;
     },
-    rollGameComplete: (state, { payload }: PayloadAction<number>) => {
+    rollGameCompleted: (state, { payload }: PayloadAction<RolledGame>) => {
       state.isRolling = false;
-      state.gameIndex = payload;
+      state.rolledGame = payload;
+    },
+    platformsChanged: {
+      prepare: (payload: string[]) => {
+        lsWrite(LS.Platforms, payload);
+        return { payload };
+      },
+      reducer: (state, { payload }: PayloadAction<string[]>) => {
+        state.selectedPlatforms = payload;
+      },
+    },
+    optionChanged: {
+      prepare: (payload: OptionUpdatedPayload) => {
+        if (payload.name !== 'theme') {
+          const lsOptions = lsRead(LS.Options) || {};
+          (lsOptions[payload.name] as any) = payload.newValue;
+          lsWrite(LS.Options, lsOptions);
+        }
+        return { payload };
+      },
+      reducer: (state, { payload }: PayloadAction<OptionUpdatedPayload>) => {
+        (state.options[payload.name] as any) = payload.newValue;
+      },
     },
   },
 });
 
-export const { rollGameStart, rollGameComplete } = rollGame.actions;
+export const {
+  rollGameStarted,
+  rollGameCompleted,
 
-const { updateRolledGamesThunk } = rollGame.actions;
+  platformsChanged,
+  optionChanged,
+} = rollGame.actions;
 
 export default rollGame.reducer;
 
 // selectors
 export const isRollingSelector = (state: RootState) => state.rollGame.isRolling;
 
-export const rolledGamesSelector = (state: RootState) =>
-  state.rollGame.rolledGames;
+export const rolledGameSelector = (state: RootState) =>
+  state.rollGame.rolledGame;
 
-export const rolledGameIndexSelector = (state: RootState) =>
-  state.rollGame.gameIndex;
+export const selectedPlatformsSelector = (state: RootState) =>
+  state.rollGame.selectedPlatforms;
 
-export const rolledGameSelector = (state: RootState) => {
-  if (state.rollGame.gameIndex === null) return null;
+export const secondsToSpinSelector = (state: RootState) =>
+  state.rollGame.options.secondsToSpin;
 
-  return state.rollGame.rolledGames[state.rollGame.gameIndex];
-};
+export const speedSelector = (state: RootState) => state.rollGame.options.speed;
 
-// actions
-export const updateRolledGames = () => (
-  dispatch: AppDispatch,
-  getState: () => RootState,
-) => {
-  const state = getState();
+export const numberOfGamesSelector = (state: RootState) =>
+  state.rollGame.options.numberOfGames;
 
-  const numberOfGames = numberOfGamesSelector(state);
-  const selectedPlatformIds = selectedPlatformIdsSelector(state);
-
-  const rolledGames = getRandomGames(selectedPlatformIds, numberOfGames);
-
-  dispatch(updateRolledGamesThunk(rolledGames));
-};
+export const themeSelector = (state: RootState) => state.rollGame.options.theme;

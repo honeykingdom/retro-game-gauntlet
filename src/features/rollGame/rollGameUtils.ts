@@ -7,11 +7,11 @@ import games from 'data/games.json';
 import platforms from 'data/platforms.json';
 
 export const getRandomGames = (
-  selectedPlatformIds: string[],
+  selectedPlatforms: string[],
   count: number,
 ): RolledGame[] => {
-  const gamesBySelectedPlatforms = selectedPlatformIds.length
-    ? R.pick(selectedPlatformIds, games)
+  const gamesBySelectedPlatforms = selectedPlatforms.length
+    ? R.pick(selectedPlatforms, games)
     : games;
 
   const rolledGames = R.pipe<any, any, any, any, any, any>(

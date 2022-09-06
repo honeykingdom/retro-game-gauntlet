@@ -1,15 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-import { Typography } from '@material-ui/core';
+import styled from '@emotion/styled';
+import { Typography } from '@mui/material';
+import { useAppSelector } from 'app/hooks';
+import SelectedPlatformsMessage from './SelectedPlatformsMessage';
+import { isRollingSelector, rolledGameSelector } from '../rollGameSlice';
 
-import {
-  isRollingSelector,
-  rolledGameSelector,
-} from 'features/rollGame/rollGameSlice';
-import SelectedPlatformsMessage from 'features/rollGame/SelectedPlatformsMessage';
-
-const ResultRoot = styled.div`
+const GameResultRoot = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,8 +14,8 @@ const ResultRoot = styled.div`
 `;
 
 const Result = () => {
-  const isRolling = useSelector(isRollingSelector);
-  const rolledGame = useSelector(rolledGameSelector);
+  const isRolling = useAppSelector(isRollingSelector);
+  const rolledGame = useAppSelector(rolledGameSelector);
 
   const renderRolledGame = () => {
     if (!rolledGame) return null;
@@ -34,9 +30,9 @@ const Result = () => {
         >
           {name}
         </Typography>
-        <Typography variant="h6" color="textSecondary">
+        <Typography variant="h6" color="textSecondary" component="span">
           Platform:{' '}
-          <Typography variant="inherit" color="textPrimary">
+          <Typography variant="inherit" color="textPrimary" component="span">
             {platform}
           </Typography>
         </Typography>
@@ -45,13 +41,13 @@ const Result = () => {
   };
 
   return (
-    <ResultRoot>
+    <GameResultRoot>
       {isRolling || !rolledGame ? (
         <SelectedPlatformsMessage />
       ) : (
         renderRolledGame()
       )}
-    </ResultRoot>
+    </GameResultRoot>
   );
 };
 
