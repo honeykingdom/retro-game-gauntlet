@@ -2,8 +2,16 @@
 import path from 'path';
 import { promises as fs } from 'fs';
 
+type Platform = {
+  id: string;
+  name: string;
+  releaseDate: string;
+  file: string;
+  encoding?: BufferEncoding;
+};
+
 // prettier-ignore
-const platforms = [
+const platforms: Platform[] = [
   { id: 'dos',                  name: 'DOS',                       releaseDate: 'August 1981',        file: 'list_dos.dat' },
   { id: 'zx-spectrum',          name: 'ZX Spectrum',               releaseDate: 'April 23, 1982',     file: 'list_zx.dat' },
   { id: 'commodore-64',         name: 'Commodore 64',              releaseDate: 'August 1982',        file: 'list_c64.dat' },
@@ -32,10 +40,10 @@ const platforms = [
   { id: 'nintendo-ds',          name: 'Nintendo DS',               releaseDate: 'November 21, 2004',  file: 'list_ds.dat' },
   { id: 'playstation-portable', name: 'PlayStation Portable',      releaseDate: 'December 12, 2004',  file: 'list_psp.dat' },
   { id: 'wii',                  name: 'Wii',                       releaseDate: 'November 19, 2006',  file: 'list_wii.dat' },
-] as const;
+];
 
 // prettier-ignore
-const normalizeMap = {
+const normalizeMap: Record<string, string> = {
   // dos
   'B.A.T. II тАУ The Koshan Conspiracy':                  'B.A.T. II – The Koshan Conspiracy',
   'Die H├╢hlenwelt Saga: Der Leuchtende Kristall':        'Die Höhlenwelt Saga: Der Leuchtende Kristall',
@@ -62,7 +70,7 @@ const normalizeMap = {
   'Seer„uber':                 'Seeräuber'
 };
 
-const normalizeGame = (name) => {
+const normalizeGame = (name: string) => {
   let newName = name.trim();
 
   if (normalizeMap[newName]) {
@@ -93,7 +101,7 @@ const main = async () => {
       ...acc,
       [id]: lists[index].trim().split('\n').map(normalizeGame),
     }),
-    {},
+    {} as Record<string, string[]>,
   );
 
   const normalizedPlatforms = platforms.map(
