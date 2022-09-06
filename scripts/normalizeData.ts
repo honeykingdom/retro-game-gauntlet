@@ -1,6 +1,6 @@
 /* eslint-disable no-console, @typescript-eslint/no-var-requires */
-const path = require('path');
-const fs = require('fs').promises;
+import path from 'path';
+import { promises as fs } from 'fs';
 
 // prettier-ignore
 const platforms = [
@@ -32,7 +32,7 @@ const platforms = [
   { id: 'nintendo-ds',          name: 'Nintendo DS',               releaseDate: 'November 21, 2004',  file: 'list_ds.dat' },
   { id: 'playstation-portable', name: 'PlayStation Portable',      releaseDate: 'December 12, 2004',  file: 'list_psp.dat' },
   { id: 'wii',                  name: 'Wii',                       releaseDate: 'November 19, 2006',  file: 'list_wii.dat' },
-]
+] as const;
 
 // prettier-ignore
 const normalizeMap = {
@@ -91,10 +91,7 @@ const main = async () => {
   const data = platforms.reduce(
     (acc, { id }, index) => ({
       ...acc,
-      [id]: lists[index]
-        .trim()
-        .split('\n')
-        .map(normalizeGame),
+      [id]: lists[index].trim().split('\n').map(normalizeGame),
     }),
     {},
   );
