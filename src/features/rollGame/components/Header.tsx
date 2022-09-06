@@ -1,8 +1,14 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { useWindowSize } from 'react-use';
-import { useTheme, Theme } from '@mui/material';
-import { Typography, IconButton, Tooltip, AppBar } from '@mui/material';
+import {
+  Typography,
+  IconButton,
+  Tooltip,
+  AppBar,
+  useTheme,
+  Theme,
+} from '@mui/material';
 import DarkThemeIcon from '@mui/icons-material//Brightness7';
 import LightThemeIcon from '@mui/icons-material//Brightness4';
 import GitHubIcon from '@mui/icons-material//GitHub';

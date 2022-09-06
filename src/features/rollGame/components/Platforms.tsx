@@ -10,19 +10,19 @@ import {
 } from '@mui/material';
 import { css } from '@emotion/react';
 import Scrollbar from 'react-scrollbars-custom';
-import { useEffectOnce, useWindowSize } from 'react-use';
+import { useWindowSize } from 'react-use';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import analytics from 'utils/analytics';
 import { BREAKPOINTS } from 'utils/constants';
+import platforms from 'data/platforms.json';
 import Platform from './Platform';
 import {
   isRollingSelector,
   platformsChanged,
   selectedPlatformsSelector,
 } from '../rollGameSlice';
-import platforms from 'data/platforms.json';
 
 const PlatformsRoot = styled('div')`
   display: flex;

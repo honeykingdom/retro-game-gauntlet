@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import analytics from 'utils/analytics';
 import { BREAKPOINTS, LS, PREVENT_FORWARD_PROPS } from 'utils/constants';
 import playSound from 'utils/playSound';
+import { lsRead } from 'utils/ls';
 import ArrowRightSvg from 'icons/arrow-right.svg';
 import GameResult from './GameResult';
 import { AppTheme, RolledGame } from '../rollGameTypes';
@@ -26,7 +27,6 @@ import {
 } from '../rollGameSlice';
 import { getRandomGames } from '../rollGameUtils';
 import { DEFAULT_SELECTED_PLATFORMS } from '../rollGameConstants';
-import { lsRead } from 'utils/ls';
 
 const RollGameRoot = styled.main`
   display: flex;
