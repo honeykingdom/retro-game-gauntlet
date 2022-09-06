@@ -2,111 +2,66 @@
   "name": "rgg",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "export": "next export",
+    "test": "jest"
+  },
   "dependencies": {
-    "@material-ui/core": "^4.11.3",
-    "@material-ui/icons": "^4.11.2",
-    "@reduxjs/toolkit": "^1.5.0",
-    "d3-array": "^2.11.0",
-    "d3-ease": "^2.0.0",
-    "date-fns": "^2.17.0",
-    "debounce": "^1.2.0",
-    "preval.macro": "^5.0.0",
-    "ramda": "^0.27.1",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-ga": "^3.3.0",
-    "react-is": "^17.0.1",
-    "react-redux": "^7.2.2",
-    "react-scripts": "^4.0.2",
-    "react-scrollbars-custom": "^4.0.25",
-    "react-use": "^17.1.1",
-    "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0",
-    "styled-components": "^5.2.1",
-    "use-sound": "^2.0.1"
+    "@emotion/cache": "^11.10.3",
+    "@emotion/react": "^11.10.4",
+    "@emotion/server": "^11.10.0",
+    "@emotion/styled": "^11.10.4",
+    "@mui/icons-material": "^5.10.3",
+    "@mui/material": "^5.10.3",
+    "@mui/styles": "^5.10.3",
+    "@reduxjs/toolkit": "^1.8.5",
+    "d3-array": "^3.2.0",
+    "d3-ease": "^3.0.1",
+    "date-fns": "^2.29.2",
+    "debounce": "^1.2.1",
+    "howler": "^2.2.3",
+    "next": "^12.2.5",
+    "next-pwa": "^5.6.0",
+    "ramda": "^0.28.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.0.2",
+    "react-scrollbars-custom": "^4.1.1",
+    "react-spinning-canvas-wheel": "^0.1.4",
+    "react-use": "^17.4.0",
+    "redux": "^4.2.0"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.9",
-    "@testing-library/react": "^11.2.5",
-    "@testing-library/user-event": "^12.7.1",
-    "@types/d3-array": "^2.9.0",
-    "@types/d3-ease": "^2.0.0",
-    "@types/debounce": "^1.2.0",
-    "@types/node": "^14.14.28",
-    "@types/preval.macro": "^3.0.0",
-    "@types/ramda": "^0.27.38",
-    "@types/react": "^17.0.2",
-    "@types/react-dom": "^17.0.1",
-    "@types/react-redux": "^7.1.16",
-    "@types/styled-components": "^5.1.7",
-    "@typescript-eslint/eslint-plugin": "^4.15.1",
-    "eslint": "^7.20.0",
-    "eslint-config-airbnb-typescript": "^12.3.1",
-    "eslint-config-prettier": "^7.2.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-react": "^7.22.0",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "prettier": "^2.2.1",
-    "prop-types": "^15.7.2",
+    "@svgr/webpack": "^6.3.1",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/d3-array": "^3.0.3",
+    "@types/d3-ease": "^3.0.0",
+    "@types/debounce": "^1.2.1",
+    "@types/gtag.js": "^0.0.11",
+    "@types/howler": "^2.2.7",
+    "@types/node": "^18.7.15",
+    "@types/ramda": "^0.28.15",
+    "@types/react": "^18.0.18",
+    "@types/react-dom": "^18.0.6",
+    "@types/react-redux": "^7.1.24",
+    "@typescript-eslint/eslint-plugin": "^5.36.1",
+    "eslint": "^8.23.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.6",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^2.7.1",
     "tiny-warning": "^1.0.3",
-    "ts-jest": "^26.5.1",
-    "typescript": "^4.1.5"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test"
-  },
-  "eslintConfig": {
-    "env": {
-      "browser": true,
-      "jest": true
-    },
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    },
-    "extends": [
-      "airbnb-typescript",
-      "plugin:@typescript-eslint/recommended",
-      "prettier",
-      "prettier/react",
-      "prettier/@typescript-eslint"
-    ],
-    "settings": {
-      "import/resolver": {
-        "node": {
-          "paths": [
-            "src"
-          ]
-        }
-      }
-    },
-    "rules": {
-      "react/require-default-props": "off",
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/explicit-module-boundary-types": "off"
-    }
-  },
-  "prettier": {
-    "singleQuote": true,
-    "trailingComma": "all",
-    "arrowParens": "always"
-  },
-  "browserslist": {
-    "production": [
-      "last 2 Chrome versions",
-      "last 2 ChromeAndroid versions",
-      "last 2 Firefox versions",
-      "last 2 Safari versions",
-      "last 2 iOS versions",
-      "last 2 Edge versions"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "ts-jest": "^28.0.8",
+    "typescript": "^4.8.2"
   }
 }
