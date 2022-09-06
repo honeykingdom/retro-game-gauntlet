@@ -2,38 +2,27 @@ name: Deploy
 
 on:
   push:
+    paths-ignore:
+      - 'README.md'
+      - '.gitignore'
     branches:
-      - master
+      - main
+  workflow_dispatch:
 
 jobs:
   deploy:
-    name: Publish to Netlify
+    name: Publish to Vercel
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Use Node 14
-        uses: actions/setup-node@v1
+      - name: Publish
+        uses: amondnet/vercel-action@v20
         with:
-          node-version: 14.x
-
-      - name: Install dependencies (with cache)
-        uses: bahmutov/npm-install@v1
-
-      # - name: Test
-      #   run: yarn test --ci --coverage --maxWorkers=2
-
-      - name: Build
-        run: yarn build
-
-      - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v1.1
-        with:
-          publish-dir: './build'
-          production-deploy: true
-          enable-commit-comment: false
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        timeout-minutes: 1
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-args: '--prod'
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          github-comment: false
