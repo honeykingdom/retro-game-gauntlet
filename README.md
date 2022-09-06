@@ -1,6 +1,6 @@
 # Retro Game Gauntlet
 
-https://retrogamegauntlet.netlify.app/
+https://retro-game-gauntlet.vercel.app
 
 ### Sources
 
