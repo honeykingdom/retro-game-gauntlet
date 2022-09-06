@@ -1,4 +1,4 @@
-declare module '*.mp3' {
-  const url: string;
-  export default url;
+declare module '*.svg' {
+  const content: React.FC<React.SVGProps<SVGSVGElement>>;
+  export default content;
 }
