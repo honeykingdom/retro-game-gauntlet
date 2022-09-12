@@ -1,27 +1,11 @@
 import React from 'react';
-import styled from '@emotion/styled';
 import { useWindowSize } from 'react-use';
-import {
-  Typography,
-  IconButton,
-  Tooltip,
-  AppBar,
-  useTheme,
-  Theme,
-} from '@mui/material';
-import DarkThemeIcon from '@mui/icons-material//Brightness7';
-import LightThemeIcon from '@mui/icons-material//Brightness4';
+import { Typography, IconButton, Tooltip, AppBar, styled } from '@mui/material';
 import GitHubIcon from '@mui/icons-material//GitHub';
-import { useAppSelector, useAppDispatch } from 'app/hooks';
-import analytics from 'utils/analytics';
 import { BREAKPOINTS } from 'utils/constants';
-import { optionChanged, themeSelector } from '../rollGameSlice';
+import ModeToggle from './ModeToggle';
 
-const HeaderRoot = styled(AppBar)<{ theme: Theme }>`
-  background-color: ${(p) => p.theme.palette.background.default} !important;
-  color: ${(p) => p.theme.palette.text.primary} !important;
-`;
-const HeaderInner = styled.div`
+const HeaderInner = styled('div')`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -38,7 +22,7 @@ const HeaderInner = styled.div`
     width: 1640px;
   }
 `;
-const Buttons = styled.div`
+const Buttons = styled('div')`
   right: 8px;
 
   & > :first-of-type {
@@ -63,22 +47,10 @@ type Props = {
 };
 
 const Header = ({ className }: Props) => {
-  const dispatch = useAppDispatch();
-
-  const theme = useTheme();
   const windowSize = useWindowSize();
-  const mode = useAppSelector(themeSelector);
-
-  const handleToggleTheme = () => {
-    const name = 'theme';
-    const value = mode === 'dark' ? 'light' : 'dark';
-
-    analytics.ui.changeOption(name, value === 'dark' ? 1 : 0);
-    dispatch(optionChanged({ name, newValue: value }));
-  };
 
   return (
-    <HeaderRoot className={className} position="static" theme={theme}>
+    <AppBar className={className} position="static">
       <HeaderInner>
         <Typography variant={windowSize.width < BREAKPOINTS.sm ? 'h5' : 'h4'}>
           Retro Game Gauntlet
@@ -87,21 +59,17 @@ const Header = ({ className }: Props) => {
           <Tooltip title="GitHub Repository">
             <IconButton
               color="inherit"
-              href="//github.com/honeykingdom/rgg/"
+              href="//github.com/honeykingdom/retro-game-gauntlet"
               target="_blank"
               rel="noreferrer noopener"
             >
               <GitHubIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Toggle dark/light theme">
-            <IconButton color="inherit" onClick={handleToggleTheme}>
-              {mode === 'dark' ? <LightThemeIcon /> : <DarkThemeIcon />}
-            </IconButton>
-          </Tooltip>
+          <ModeToggle />
         </Buttons>
       </HeaderInner>
-    </HeaderRoot>
+    </AppBar>
   );
 };
 
