@@ -93,6 +93,12 @@ const analytics = {
         label: name,
         value,
       }),
+    changeColorScheme: (value: any) =>
+      sendEvent({
+        category: CATEGORIES.userInterface,
+        action: 'Change Color Scheme',
+        value,
+      }),
     link: (url: string) =>
       sendEvent({
         category: CATEGORIES.userInterface,
