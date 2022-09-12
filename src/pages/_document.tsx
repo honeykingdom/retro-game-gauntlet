@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
+import { getInitColorSchemeScript } from '@mui/material';
 import createEmotionServer from '@emotion/server/create-instance';
 import createEmotionCache from 'utils/createEmotionCache';
 
@@ -48,6 +49,7 @@ class MyDocument extends Document {
           <script dangerouslySetInnerHTML={{ __html: gaScript }} />
         </Head>
         <body>
+          {getInitColorSchemeScript()}
           <Main />
           <NextScript />
         </body>

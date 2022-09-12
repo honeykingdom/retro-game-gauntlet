@@ -1,15 +1,14 @@
 // https://brianlovin.com/writing/adding-dark-mode-with-next-js
-import { useMemo } from 'react';
 import { AppProps, NextWebVitalsMetric } from 'next/app';
 import { Provider as ReduxProvider } from 'react-redux';
 import { CacheProvider } from '@emotion/react';
 import { EmotionCache } from '@emotion/cache';
-import { CssBaseline, ThemeProvider } from '@mui/material';
+import {
+  CssBaseline,
+  Experimental_CssVarsProvider as CssVarsProvider,
+} from '@mui/material';
 import store from 'app/store';
-import getTheme from 'app/theme';
-import { useAppSelector } from 'app/hooks';
 import createEmotionCache from 'utils/createEmotionCache';
-import { themeSelector } from 'features/rollGame/rollGameSlice';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -17,23 +16,16 @@ interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
 
-const ReduxThemeProvider = ({ children }: { children?: React.ReactNode }) => {
-  const mode = useAppSelector(themeSelector);
-  const theme = useMemo(() => getTheme(mode), [mode]);
-
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
-};
-
 const MyApp = (props: MyAppProps) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
   return (
     <ReduxProvider store={store}>
       <CacheProvider value={emotionCache}>
-        <ReduxThemeProvider>
+        <CssVarsProvider defaultColorScheme="dark">
           <CssBaseline />
           <Component {...pageProps} />
-        </ReduxThemeProvider>
+        </CssVarsProvider>
       </CacheProvider>
     </ReduxProvider>
   );
