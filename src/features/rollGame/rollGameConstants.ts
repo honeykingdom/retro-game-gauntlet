@@ -6,5 +6,4 @@ export const DEFAULT_OPTIONS: Options = {
   secondsToSpin: 30,
   speed: 3,
   numberOfGames: 16,
-  theme: 'dark',
 };

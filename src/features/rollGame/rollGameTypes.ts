@@ -1,10 +1,11 @@
-export type AppTheme = 'light' | 'dark';
+import type { DefaultColorScheme } from '@mui/material/styles/experimental_extendTheme';
+
+export type ColorScheme = DefaultColorScheme;
 
 export type Options = {
   secondsToSpin: number;
   speed: number;
   numberOfGames: number;
-  theme: AppTheme;
 };
 
 export type OptionName = keyof Options;

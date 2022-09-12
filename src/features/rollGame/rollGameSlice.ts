@@ -54,11 +54,9 @@ const rollGame = createSlice({
     },
     optionChanged: {
       prepare: (payload: OptionUpdatedPayload) => {
-        if (payload.name !== 'theme') {
-          const lsOptions = lsRead(LS.Options) || {};
-          (lsOptions[payload.name] as any) = payload.newValue;
-          lsWrite(LS.Options, lsOptions);
-        }
+        const lsOptions = lsRead(LS.Options) || {};
+        (lsOptions[payload.name] as any) = payload.newValue;
+        lsWrite(LS.Options, lsOptions);
         return { payload };
       },
       reducer: (state, { payload }: PayloadAction<OptionUpdatedPayload>) => {
@@ -94,5 +92,3 @@ export const speedSelector = (state: RootState) => state.rollGame.options.speed;
 
 export const numberOfGamesSelector = (state: RootState) =>
   state.rollGame.options.numberOfGames;
-
-export const themeSelector = (state: RootState) => state.rollGame.options.theme;
