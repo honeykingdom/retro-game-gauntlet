@@ -1,13 +1,19 @@
 import { Howl } from 'howler';
 
-const tick = new Howl({ src: ['/sounds/wheel-tick.mp3'] });
-const complete = new Howl({ src: ['/sounds/wheel-complete.mp3'] });
-
-const SOUNDS = {
-  tick,
-  complete,
+const SOUNDS: Record<string, string | Howl> = {
+  tick: '/sounds/wheel-tick.mp3',
+  complete: '/sounds/wheel-complete.mp3',
 };
 
-const playSound = (name: keyof typeof SOUNDS) => SOUNDS[name].play();
+const playSound = (name: keyof typeof SOUNDS) => {
+  let sound = SOUNDS[name];
+
+  if (typeof sound === 'string') {
+    sound = new Howl({ src: [sound] });
+    SOUNDS[name] = sound;
+  }
+
+  return sound.play();
+};
 
 export default playSound;
