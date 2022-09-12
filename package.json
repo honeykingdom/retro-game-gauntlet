@@ -1,5 +1,5 @@
 {
-  "name": "rgg",
+  "name": "retro-game-gauntlet",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -15,7 +15,7 @@
     "@emotion/server": "^11.10.0",
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.10.3",
-    "@mui/material": "^5.10.3",
+    "@mui/material": "^5.10.5",
     "@mui/styles": "^5.10.3",
     "@reduxjs/toolkit": "^1.8.5",
     "d3-array": "^3.2.0",
@@ -23,7 +23,7 @@
     "date-fns": "^2.29.2",
     "debounce": "^1.2.1",
     "howler": "^2.2.3",
-    "next": "^12.2.5",
+    "next": "^12.3.0",
     "next-pwa": "^5.6.0",
     "ramda": "^0.28.0",
     "react": "^18.2.0",
@@ -36,7 +36,7 @@
     "redux-thunk": "^2.4.1"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^12.2.5",
+    "@next/eslint-plugin-next": "^12.3.0",
     "@svgr/webpack": "^6.3.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -46,25 +46,25 @@
     "@types/debounce": "^1.2.1",
     "@types/gtag.js": "^0.0.11",
     "@types/howler": "^2.2.7",
-    "@types/node": "^18.7.15",
+    "@types/node": "^18.7.16",
     "@types/ramda": "^0.28.15",
-    "@types/react": "^18.0.18",
+    "@types/react": "^18.0.19",
     "@types/react-dom": "^18.0.6",
     "@types/react-redux": "^7.1.24",
-    "@typescript-eslint/eslint-plugin": "^5.36.1",
-    "@typescript-eslint/parser": "^5.36.2",
-    "eslint": "^8.23.0",
+    "@typescript-eslint/eslint-plugin": "^5.37.0",
+    "@typescript-eslint/parser": "^5.37.0",
+    "eslint": "^8.23.1",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.6.1",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.31.6",
+    "eslint-plugin-react": "^7.31.8",
     "eslint-plugin-react-hooks": "^4.6.0",
     "prettier": "^2.7.1",
     "tiny-warning": "^1.0.3",
-    "ts-jest": "^28.0.8",
-    "typescript": "^4.8.2"
+    "ts-jest": "^29.0.0",
+    "typescript": "^4.8.3"
   }
 }
