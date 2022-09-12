@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import styled from '@emotion/styled';
+import { useColorScheme, styled } from '@mui/material';
 import SpinningWheel, {
   SpinningWheelRef,
   WheelColors,
@@ -7,13 +7,14 @@ import SpinningWheel, {
 } from 'react-spinning-canvas-wheel';
 import { useWindowSize } from 'react-use';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
+import useMounted from 'hooks/useMounted';
 import analytics from 'utils/analytics';
 import { BREAKPOINTS, LS, PREVENT_FORWARD_PROPS } from 'utils/constants';
 import playSound from 'utils/playSound';
 import { lsRead } from 'utils/ls';
 import ArrowRightSvg from 'icons/arrow-right.svg';
 import GameResult from './GameResult';
-import { AppTheme, RolledGame } from '../rollGameTypes';
+import { ColorScheme, RolledGame } from '../rollGameTypes';
 import {
   isRollingSelector,
   numberOfGamesSelector,
@@ -23,17 +24,16 @@ import {
   secondsToSpinSelector,
   selectedPlatformsSelector,
   speedSelector,
-  themeSelector,
 } from '../rollGameSlice';
 import { getRandomGames } from '../rollGameUtils';
 import { DEFAULT_SELECTED_PLATFORMS } from '../rollGameConstants';
 
-const RollGameRoot = styled.main`
+const RollGameRoot = styled('main')`
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
-const WheelContainer = styled.div`
+const WheelContainer = styled('div')`
   position: relative;
   display: flex;
 `;
@@ -43,7 +43,7 @@ type RollButtonProps = {
   $textColor: string;
   $borderColor: string;
 };
-const RollButton = styled.button<RollButtonProps>`
+const RollButton = styled('button')<RollButtonProps>`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -87,7 +87,7 @@ const ArrowRightIcon = styled(
   stroke: ${(p) => p.$borderColor};
 `;
 
-const WHEEL_COLORS: Record<AppTheme, WheelColors> = {
+const WHEEL_COLORS: Record<ColorScheme, WheelColors> = {
   dark: {
     wheelBackground: '#212121',
     text: '#fff',
@@ -100,14 +100,14 @@ const WHEEL_COLORS: Record<AppTheme, WheelColors> = {
   },
 };
 
-const getSegmentBgColor = (theme: AppTheme, i: number) => {
+const getSegmentBgColor = (theme: ColorScheme, i: number) => {
   if (theme === 'dark') {
     return i % 2 === 0 ? '#2f2f2f' : '#212121';
   }
   return i % 2 === 0 ? '#f4f4f4' : '#fff';
 };
 
-const getWheelSegments = (rolledGames: RolledGame[], theme: AppTheme) =>
+const getWheelSegments = (rolledGames: RolledGame[], theme: ColorScheme) =>
   rolledGames.map<WheelSegment>(({ name }, i) => ({
     title: name,
     backgroundColor: getSegmentBgColor(theme, i),
@@ -123,7 +123,7 @@ const RollGame = ({ className }: Props) => {
   const [radius, setRadius] = useState(300);
   const [rolledGames, setRolledGames] = useState<RolledGame[]>([]);
 
-  const mode = useAppSelector(themeSelector);
+  const mounted = useMounted();
   const isRolling = useAppSelector(isRollingSelector);
   const selectedPlatforms = useAppSelector(selectedPlatformsSelector);
   const numberOfGames = useAppSelector(numberOfGamesSelector);
@@ -131,8 +131,10 @@ const RollGame = ({ className }: Props) => {
   const speed = useAppSelector(speedSelector);
 
   const windowSize = useWindowSize();
-
   const spinningWheelRef = useRef<SpinningWheelRef>(null);
+
+  const colorScheme = useColorScheme();
+  const mode = colorScheme.mode === 'dark' ? 'dark' : 'light';
 
   useEffect(() => {
     if (windowSize.width < BREAKPOINTS.sm) {
@@ -183,6 +185,8 @@ const RollGame = ({ className }: Props) => {
   const isRollButtonDisabled = isRolling || !selectedPlatforms.length;
 
   const colors = WHEEL_COLORS[mode];
+
+  if (!mounted) return null;
 
   return (
     <RollGameRoot className={className}>

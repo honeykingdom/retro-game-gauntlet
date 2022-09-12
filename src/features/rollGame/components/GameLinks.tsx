@@ -1,6 +1,5 @@
 import React from 'react';
-import styled from '@emotion/styled';
-import { Button, Box, Typography } from '@mui/material';
+import { Button, Box, Typography, styled } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import GetAppIcon from '@mui/icons-material/GetApp';
@@ -8,7 +7,7 @@ import { useAppSelector } from 'app/hooks';
 import analytics from 'utils/analytics';
 import { isRollingSelector, rolledGameSelector } from '../rollGameSlice';
 
-const GameLinksRoot = styled.div``;
+const GameLinksRoot = styled('div')``;
 const ServiceLink = styled(Button)<{ target?: string; rel?: string }>`
   width: 100%;
   text-transform: none !important;
@@ -17,7 +16,7 @@ const ServiceLink = styled(Button)<{ target?: string; rel?: string }>`
     justify-content: flex-start;
   }
 `;
-const Links = styled.div`
+const Links = styled('div')`
   display: grid;
   grid-gap: 16px 16px;
 `;

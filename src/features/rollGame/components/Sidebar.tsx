@@ -1,6 +1,6 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material';
 
-const LinksRoot = styled.aside`
+const LinksRoot = styled('aside')`
   display: flex;
   flex-direction: column;
 

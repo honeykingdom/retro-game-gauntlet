@@ -1,11 +1,10 @@
 import React from 'react';
-import styled from '@emotion/styled';
-import { Typography } from '@mui/material';
+import { Typography, styled } from '@mui/material';
 import { useAppSelector } from 'app/hooks';
 import SelectedPlatformsMessage from './SelectedPlatformsMessage';
 import { isRollingSelector, rolledGameSelector } from '../rollGameSlice';
 
-const GameResultRoot = styled.div`
+const GameResultRoot = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: center;

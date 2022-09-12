@@ -1,6 +1,5 @@
 import Head from 'next/head';
-import styled from '@emotion/styled';
-import { Box } from '@mui/material';
+import { Box, styled } from '@mui/material';
 import { BREAKPOINTS } from 'utils/constants';
 import Header from './Header';
 import Sidebar from './Sidebar';

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-import { Button, Box, Typography, Slider } from '@mui/material';
+import { Button, Box, Typography, Slider, styled } from '@mui/material';
 import debounce from 'debounce';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import analytics from 'utils/analytics';
@@ -15,11 +14,12 @@ import {
 import options from '../optionsConstants';
 import { OptionName } from '../rollGameTypes';
 
-const OptionsRoot = styled.div`
+const OptionsRoot = styled('div')`
   display: flex;
   flex-direction: column;
+  padding: 0 8px;
 `;
-const OptionsList = styled.div<{ isDisabled: boolean }>`
+const OptionsList = styled('div')<{ isDisabled: boolean }>`
   transition-property: opacity;
   transition-duration: 0.2s;
   transition-timing-function: ease;

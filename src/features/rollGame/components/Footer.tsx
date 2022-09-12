@@ -1,11 +1,10 @@
 import React from 'react';
-import styled from '@emotion/styled';
-import { Typography, Link, useTheme, Theme } from '@mui/material';
+import { Typography, Link, styled } from '@mui/material';
 import analytics from 'utils/analytics';
 import { BREAKPOINTS } from 'utils/constants';
 import { gamesCount } from '../rollGameUtils';
 
-const FooterRoot = styled.footer<{ theme: Theme }>`
+const FooterRoot = styled('footer')`
   display: flex;
   justify-content: center;
   border-top: 1px solid ${(p) => p.theme.palette.divider};
@@ -37,47 +36,43 @@ type Props = {
 const gamesListSourceUrl = '//nukecritic.com/rgg/';
 const authorUrl = '//github.com/DmitryScaletta';
 
-const Footer = ({ className }: Props) => {
-  const theme = useTheme();
+const Footer = ({ className }: Props) => (
+  <FooterRoot className={className}>
+    <FooterInner>
+      <Typography variant="inherit" component="span" color="textSecondary">
+        Games in database:{' '}
+        <Typography variant="inherit" component="span" color="textPrimary">
+          {gamesCount}
+        </Typography>{' '}
+        (
+        <Link
+          rel="noreferrer noopener"
+          target="_blank"
+          color="inherit"
+          href={gamesListSourceUrl}
+          onClick={() => analytics.ui.link(gamesListSourceUrl)}
+        >
+          source
+        </Link>
+        )
+      </Typography>
 
-  return (
-    <FooterRoot className={className} theme={theme}>
-      <FooterInner>
-        <Typography variant="inherit" component="span" color="textSecondary">
-          Games in database:{' '}
-          <Typography variant="inherit" component="span" color="textPrimary">
-            {gamesCount}
-          </Typography>{' '}
-          (
+      <Typography variant="inherit" component="span" color="textSecondary">
+        Author:{' '}
+        <Typography variant="inherit" component="span" color="textPrimary">
           <Link
             rel="noreferrer noopener"
             target="_blank"
             color="inherit"
-            href={gamesListSourceUrl}
-            onClick={() => analytics.ui.link(gamesListSourceUrl)}
+            href={authorUrl}
+            onClick={() => analytics.ui.link(authorUrl)}
           >
-            source
+            DmitryScaletta
           </Link>
-          )
         </Typography>
-
-        <Typography variant="inherit" component="span" color="textSecondary">
-          Author:{' '}
-          <Typography variant="inherit" component="span" color="textPrimary">
-            <Link
-              rel="noreferrer noopener"
-              target="_blank"
-              color="inherit"
-              href={authorUrl}
-              onClick={() => analytics.ui.link(authorUrl)}
-            >
-              DmitryScaletta
-            </Link>
-          </Typography>
-        </Typography>
-      </FooterInner>
-    </FooterRoot>
-  );
-};
+      </Typography>
+    </FooterInner>
+  </FooterRoot>
+);
 
 export default React.memo(Footer);

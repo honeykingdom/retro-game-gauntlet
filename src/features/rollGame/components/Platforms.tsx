@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Typography,
-  List,
-  Button,
-  Box,
-  ListItem,
-  useTheme,
-  styled,
-} from '@mui/material';
+import { Typography, List, Button, Box, ListItem, styled } from '@mui/material';
 import { css } from '@emotion/react';
 import Scrollbar from 'react-scrollbars-custom';
 import { useWindowSize } from 'react-use';
@@ -55,8 +47,6 @@ const Platforms = () => {
   const isRolling = useAppSelector(isRollingSelector);
   const selectedPlatforms = useAppSelector(selectedPlatformsSelector);
 
-  const theme = useTheme();
-
   const windowSize = useWindowSize();
 
   const handleToggleIsVisible = () => {
@@ -90,7 +80,7 @@ const Platforms = () => {
 
   const renderPlatformsList = () => (
     <PlatformsList isDisabled={isRolling}>
-      <Buttons component="span" mb={1} theme={theme}>
+      <Buttons component="span" mb={1}>
         <Button
           color="inherit"
           size="small"
