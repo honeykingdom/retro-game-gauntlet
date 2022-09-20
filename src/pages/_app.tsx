@@ -22,7 +22,10 @@ const MyApp = (props: MyAppProps) => {
   return (
     <ReduxProvider store={store}>
       <CacheProvider value={emotionCache}>
-        <CssVarsProvider defaultColorScheme="dark">
+        <CssVarsProvider
+          defaultColorScheme={{ dark: 'dark', light: 'light' }}
+          defaultMode="dark"
+        >
           <CssBaseline />
           <Component {...pageProps} />
         </CssVarsProvider>
