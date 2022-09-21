@@ -205,7 +205,7 @@ const RollGame = ({ className }: Props) => {
         <RollButton
           onClick={handleRollClick}
           disabled={isRollButtonDisabled}
-          $bgColor={mode === 'dark' ? '#424242' : 'fff'}
+          $bgColor={mode === 'dark' ? '#424242' : '#fff'}
           $borderColor={colors.border}
           $radius={radius}
           $textColor={colors.text}
