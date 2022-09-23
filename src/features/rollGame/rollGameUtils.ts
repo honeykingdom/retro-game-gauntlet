@@ -1,8 +1,6 @@
 import * as R from 'ramda';
 import { shuffle } from 'd3-array';
-
 import { RolledGame } from 'features/rollGame/rollGameTypes';
-
 import games from 'data/games.json';
 import platforms from 'data/platforms.json';
 
