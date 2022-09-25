@@ -1,5 +1,4 @@
 import React from 'react';
-import * as R from 'ramda';
 import { Typography } from '@mui/material';
 import { useAppSelector } from 'app/hooks';
 import replaceSpacesWithNbsp from 'utils/replaceSpacesWithNbsp';
@@ -30,7 +29,7 @@ const SelectedPlatformsMessage = () => {
 
     const selected = selectedPlatforms
       .slice(0, 3)
-      .map((id) => platforms.find(R.propEq('id', id))) as typeof platforms;
+      .map((id) => platforms.find((p) => p.id === id)) as typeof platforms;
 
     const selectedPlatformsList = selected.map(({ id, name }, index) => (
       <React.Fragment key={id}>
