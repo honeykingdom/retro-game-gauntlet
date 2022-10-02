@@ -46,6 +46,10 @@ class MyDocument extends Document {
             async
             src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
           />
+          <meta
+            name="description"
+            content="Roll your random video game to play. More than 32k games on 28 retro platforms."
+          />
           <script dangerouslySetInnerHTML={{ __html: gaScript }} />
         </Head>
         <body>
