@@ -63,7 +63,7 @@ const getLinks = (name: string) => {
     {
       id: 'romhustler',
       text: 'RomHustler',
-      href: `//romhustler.org/roms/search/?q=${searchQuery}`,
+      href: `//romhustler.org/roms/search/?query=${searchQuery}`,
       icon: <GetAppIcon />,
     },
   ];
